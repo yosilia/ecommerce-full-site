@@ -1,4 +1,6 @@
+import { CartContextProvider } from "@/components/CartContext";
 import { createGlobalStyle } from "styled-components";
+import { AuthProvider } from "@/context/AuthContext";
 
 const GlobalStyles = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400..700&display=swap');
@@ -14,8 +16,13 @@ const GlobalStyles = createGlobalStyle`
 export default function App({ Component, pageProps }) {
   return (
     <>
-      <GlobalStyles />
-      <Component {...pageProps} />
+      <AuthProvider>
+       <GlobalStyles />
+      <CartContextProvider>
+       <Component {...pageProps} />  
+      </CartContextProvider> 
+      </AuthProvider>
+      
     </>
   );
 }

@@ -1,7 +1,9 @@
 import Center from "@/components/Center"; 
 import styled from "styled-components";
-import PrimaryButton from "./PrimaryButton";
+import Button from "./Button";
 import { primary } from "@/lib/colors";
+import { useContext } from "react";
+import { CartContext } from "@/components/CartContext"; 
 
 const Bg = styled.div`
     background-color: #FAFAFA;
@@ -39,7 +41,12 @@ const Column = styled.div`
 //`;
 
 
-export default function Featured() {
+export default function Featured({product}) {
+    const {addProduct} = useContext(CartContext);
+    function addProductToCart() {
+      addProduct(product._id);
+    }
+
     return (
         <Bg>
             <Center>
@@ -53,7 +60,11 @@ export default function Featured() {
                         Whether you’re looking for vibrant patterns, bold styles, or timeless pieces, 
                         you’ll find something unique and special at DM Touch. 
                         Explore our latest featured products and elevate your wardrobe today!</Description>
-                        <PrimaryButton>Explore Collection</PrimaryButton>
+                        <Button>Explore Collection</Button>
+                        {/* This button will navigate the user to all the products we currently 
+                        have in stock where they can the further filter by sorting by price etc
+                        onClick={addProductToCart} --- function to add products to cart 
+                        */}
                         </div>
                      </Column>
                 <Column>
