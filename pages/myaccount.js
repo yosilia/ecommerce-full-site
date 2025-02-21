@@ -15,7 +15,7 @@ const PageContainer = styled.div`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two-column layout */
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
   justify-content: center;
 `;
@@ -208,7 +208,10 @@ export default function MyAccount() {
             {requests.length === 0 ? (
               <p>No requests found.</p>
             ) : (
-              <table className="basic w-full border mt-4">
+              <table
+                className="basic w-full border mt-4"
+                style={{ tableLayout: "fixed", width: "100%" }}
+              >
                 <thead>
                   <tr className="bg-gray-800 text-white">
                     <th>Date</th>
@@ -244,7 +247,9 @@ export default function MyAccount() {
 
           <Box>
             <Title>Would you like to make a custom design request?</Title>
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div
+              style={{ display: "flex", gap: "10px", justifyContent: "center" }}
+            >
               <Link href="/custom-design">
                 <Button>Yes</Button>
               </Link>
@@ -252,7 +257,7 @@ export default function MyAccount() {
             </div>
           </Box>
         </GridContainer>
-        <LogoutButton className="mb-8" onClick={handleLogout}>
+        <LogoutButton style={{ marginTop: "40px" }} onClick={handleLogout}>
           Logout
         </LogoutButton>
       </PageContainer>
