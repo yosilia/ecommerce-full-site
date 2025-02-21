@@ -128,27 +128,32 @@ export default function CustomDesignPage() {
   async function handleImageUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
-
-    const imgData = new FormData();
-    imgData.append("file", file);
-
-    try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: imgData,
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        setFormData((prev) => ({ ...prev, image: data.url }));
-      } else {
-        alert("Image upload failed.");
+  
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+  
+    reader.onload = async () => {
+      const base64String = reader.result.split(",")[1]; // Remove metadata
+      try {
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ file: base64String }),
+        });
+  
+        const data = await res.json();
+        if (data.success) {
+          setFormData((prev) => ({ ...prev, image: data.image })); // Store Base64 string
+        } else {
+          alert("Image upload failed.");
+        }
+      } catch (error) {
+        console.error("Upload error:", error);
+        alert("Failed to upload image.");
       }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
+    };
   }
-
+  
   // submitting request
 
   async function submitRequest(e) {
@@ -293,7 +298,8 @@ export default function CustomDesignPage() {
               <img
                 src={formData.image}
                 alt="Uploaded Design"
-                className="w-full h-40 object-cover rounded"
+                className="rounded-lg shadow border" 
+                style={{ maxWidth: "300px", maxHeight: "300px" }} // 
               />
             </div>
           )}

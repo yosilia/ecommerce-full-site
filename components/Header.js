@@ -29,8 +29,6 @@ const Wrapper = styled.div`
 const NavigationLink = styled(Link)`
   color: ${({ darkMode }) => (darkMode ? "#fff" : "#000")};
   text-decoration: none;
-   &:hover {
-    text-decoration: underline;
 `;
 
 const StyledNav = styled.nav`
@@ -54,7 +52,7 @@ const BackgroundImage = styled.div`
 
 const LogoutButton = styled.button`
   background-color: transparent;
-  color: white;
+  color: ${({ darkMode }) => (darkMode ? "#fff" : "#000")};
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
@@ -103,7 +101,7 @@ export default function Header({ showBackground = true, children }) {  // Accept
             {user ? (
               <>
                 <NavigationLink href={"/myaccount"} darkMode={darkMode}>My Account</NavigationLink>
-                <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+                <LogoutButton onClick={handleLogout} darkMode={darkMode}>Logout</LogoutButton>
               </>
             ) : (
               <NavigationLink href={"/account"} darkMode={darkMode}>Account</NavigationLink>

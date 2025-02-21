@@ -9,14 +9,15 @@ import Link from "next/link";
 
 const PageContainer = styled.div`
   padding: 40px;
+  max-width: 800px;
+  margin: auto;
 `;
 
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Two-column layout */
   gap: 20px;
-  max-width: 800px;
-  margin: auto;
+  justify-content: center;
 `;
 
 const Box = styled.div`
@@ -30,6 +31,7 @@ const Title = styled.h3`
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 15px;
+  text-align: center;
 `;
 
 const Input = styled.input`
@@ -43,18 +45,27 @@ const Input = styled.input`
 `;
 
 const LogoutButton = styled.button`
-  background-color: black;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  background-color: #fff;
+  border: 2px solid #000;
+  color: #000;
+  padding: 10px 20px;
+  font-family: lora;
+  font-size: 14px;
+  font-weight: italic;
+  text-transform: uppercase;
+  border-radius: 8px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  justify-content: center;
   width: 100%;
-  margin-top: 20px;
-  font-family: "Lora", serif;
+
   &:hover {
-    background-color: #333;
+    background-color: #000;
+    color: #fff;
+  }
+
+  &:focus {
+    outline: none;
   }
 `;
 
@@ -67,6 +78,7 @@ export default function MyAccount() {
   const [country, setCountry] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
   const [postcode, setPostcode] = useState("");
+  const [requests, setRequests] = useState([]);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -84,6 +96,27 @@ export default function MyAccount() {
       setPostcode(user.postcode || "");
     }
   }, [user]); // Ensures it runs when `user` updates
+
+  useEffect(() => {
+    if (user) {
+      fetchUserRequests(user.email);
+    }
+  }, [user]);
+
+  async function fetchUserRequests(email) {
+    try {
+      const res = await fetch(`/api/design-requests?email=${email}`);
+      const data = await res.json();
+
+      if (res.ok) {
+        setRequests(data.data); // Store all requests
+      } else {
+        setRequests([]); // If no requests, clear the list
+      }
+    } catch (error) {
+      console.error("Error fetching user requests:", error);
+    }
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -121,7 +154,8 @@ export default function MyAccount() {
     <>
       <Header />
       <PageContainer>
-        <h2>Welcome {user?.name}</h2>
+        <h2 style={{ textAlign: "center" }}>Welcome {user?.name}</h2>
+
         <GridContainer>
           {/* Personal Details */}
           <Box>
@@ -168,10 +202,48 @@ export default function MyAccount() {
             <Input type="text" value="Order #67890" readOnly />
           </Box>
 
+          {/* User Requests Section */}
+          <Box style={{ maxHeight: "200px", overflowY: "auto" }}>
+            <Title>Your Requests</Title>
+            {requests.length === 0 ? (
+              <p>No requests found.</p>
+            ) : (
+              <table className="basic w-full border mt-4">
+                <thead>
+                  <tr className="bg-gray-800 text-white">
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {requests.map((req) => (
+                    <tr key={req._id} className="border-b">
+                      <td>{req.appointmentDate}</td>
+                      <td>{req.appointmentTime}</td>
+                      <td
+                        className={`font-bold ${
+                          req.status === "Completed"
+                            ? "text-green-500"
+                            : req.status === "In Progress"
+                            ? "text-yellow-500"
+                            : req.status === "Declined" ||
+                              req.status === "Cancelled"
+                            ? "text-red-500"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        {req.status}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </Box>
+
           <Box>
             <Title>Would you like to make a custom design request?</Title>
-
-            {/* Parent wrapper with flex and gap */}
             <div style={{ display: "flex", gap: "10px" }}>
               <Link href="/custom-design">
                 <Button>Yes</Button>
@@ -180,7 +252,9 @@ export default function MyAccount() {
             </div>
           </Box>
         </GridContainer>
-        <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+        <LogoutButton className="mb-8" onClick={handleLogout}>
+          Logout
+        </LogoutButton>
       </PageContainer>
     </>
   );

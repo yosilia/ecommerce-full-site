@@ -5,6 +5,7 @@ const SavingButton = styled.button`
   border: 2px solid #000;
   color: #000;
   padding: 10px 20px; 
+  font-family: lora;
   font-size: 14px; 
   font-weight: italic;
   text-transform: uppercase;

@@ -21,7 +21,7 @@ const DesignRequestSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["Pending", "In Progress", "Completed"],
+      enum: ["Pending", "In Progress", "Completed", "Declined", "Cancelled"],
       default: "Pending",
     },
 
