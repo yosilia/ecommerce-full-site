@@ -1,23 +1,45 @@
-import fs from "fs";
+import multiparty from 'multiparty';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import fs from 'fs';
+import mime from 'mime-types';
+const bucketName = 'haliat-next-ecommerce';
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ success: false, message: "Method Not Allowed" });
+export default async function handle(req, res) {
+
+  const form = new multiparty.Form();
+  const { fields, files } = await new Promise((resolve, reject) => {
+    form.parse(req, (err, fields, files) => {
+      if (err) reject(err);
+      resolve({ fields, files });
+    });
+  });
+  console.log('length:', files.file.length);
+  const client = new S3Client({
+    region: 'eu-north-1',
+    credentials: {
+      accessKeyId: process.env.S3_ACCESS_KEY,
+      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    },
+  });
+  const links = [];
+  for (const file of files.file) {
+    const extension = file.originalFilename.split('.').pop();
+    const newFilename = Date.now() + '.' + extension;
+    await client.send(
+      new PutObjectCommand({
+        Bucket: bucketName,
+        Key: newFilename,
+        Body: fs.readFileSync(file.path),
+        ACL: 'public-read',
+        ContentType: mime.lookup(file.path),
+      })
+    );
+    const link = `https://${bucketName}.s3.amazonaws.com/${newFilename}`;
+    links.push(link);
   }
-
-  try {
-    const file = req.body.file; // Read file from request
-
-    if (!file) {
-      return res.status(400).json({ success: false, message: "No file uploaded" });
-    }
-
-    // ✅ Convert image to Base64
-    const base64Image = `data:image/png;base64,${file}`;
-
-    return res.status(200).json({ success: true, image: base64Image });
-  } catch (error) {
-    console.error("Image upload error:", error);
-    return res.status(500).json({ success: false, message: "Image upload failed" });
-  }
+  return res.json({ links });
 }
+
+export const config = {
+  api: { bodyParser: false },
+};

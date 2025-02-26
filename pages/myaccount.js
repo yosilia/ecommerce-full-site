@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import Header from "@/components/Header";
 import { AuthContext } from "@/context/AuthContext";
-import SaveButton from "@/components/SaveButton";
+import LongButton from "@/components/LongButton";
 import Button from "@/components/Button";
 import Link from "next/link";
 
@@ -192,7 +192,7 @@ export default function MyAccount() {
               value={city}
               onChange={(e) => setCity(e.target.value)}
             />
-            <SaveButton onClick={handleSavePersonalDetails}>Save</SaveButton>
+            <LongButton onClick={handleSavePersonalDetails}>Save</LongButton>
           </Box>
 
           {/* Order History */}
@@ -222,7 +222,11 @@ export default function MyAccount() {
                 <tbody>
                   {requests.map((req) => (
                     <tr key={req._id} className="border-b">
-                      <td>{req.appointmentDate}</td>
+                      <td>
+                        {req.appointmentDate
+                          ?.replace("T", " ")
+                          .substring(0, 10) || "N/A"}
+                      </td>
                       <td>{req.appointmentTime}</td>
                       <td
                         className={`font-bold ${

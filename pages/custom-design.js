@@ -1,5 +1,4 @@
 import Header from "@/components/Header";
-import SaveButton from "@/components/SaveButton";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import Button from "@/components/Button";
@@ -94,65 +93,51 @@ export default function CustomDesignPage() {
     try {
       const response = await fetch(`/api/design-requests?date=${date}`);
       const data = await response.json();
-      setBookedAppointments(data.data.map((a) => a.appointmentTime)); // Extract booked times
+      setBookedAppointments(Array.isArray(data?.data) ? data.data.map((a) => a.appointmentTime) : []);
+ // Extract booked times
     } catch (error) {
       console.error("Error fetching appointments:", error);
     }
   };
 
-  const handleBooking = async () => {
-    if (!formData.appointmentDate || !formData.appointmentTime) {
-      alert("Please select a valid date and time.");
-      return;
-    }
-
+  async function handleImageUpload(e) {
+    const files = Array.from(e.target.files); // Convert FileList to array
+    if (!files.length) return;
+  
+    const formData = new FormData();
+    files.forEach((file) => formData.append("file", file));
+  
     try {
-      const res = await fetch("/api/design-requests", {
+      const res = await fetch("/api/upload", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: formData, // ✅ Sends multiple images
       });
-
+  
       const data = await res.json();
-      if (res.ok) {
-        alert("Appointment successfully booked!");
-        fetchBookedAppointments(formData.appointmentDate);
+      if (data.links) {
+        setFormData((prev) => ({
+          ...prev,
+          images: [...(prev.images || []), ...data.links], // ✅ Store all images in an array
+        }));
       } else {
-        alert(data.message);
+        alert("Image upload failed.");
       }
     } catch (error) {
-      console.error("Error booking appointment:", error);
+      console.error("Upload error:", error);
+      alert("Failed to upload images.");
     }
-  };
-
-  async function handleImageUpload(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-  
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-  
-    reader.onload = async () => {
-      const base64String = reader.result.split(",")[1]; // Remove metadata
-      try {
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ file: base64String }),
-        });
-  
-        const data = await res.json();
-        if (data.success) {
-          setFormData((prev) => ({ ...prev, image: data.image })); // Store Base64 string
-        } else {
-          alert("Image upload failed.");
-        }
-      } catch (error) {
-        console.error("Upload error:", error);
-        alert("Failed to upload image.");
-      }
-    };
   }
+  
+  
+
+  function removeImage(index) {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  }
+  
+  
   
   // submitting request
 
@@ -236,7 +221,13 @@ export default function CustomDesignPage() {
             {formData.appointmentDate && (
               <>
                 <p>Select an available time:</p>
-                {bookedAppointments.length >= 2 ? (
+
+                {/* Check if the selected day is Sunday == 0 */}
+                {new Date(formData.appointmentDate).getDay() === 0 ? (
+                  <p className="text-red-500">
+                    This day is unavailable for booking.
+                  </p>
+                ) : bookedAppointments.length >= 5 ? (
                   <p className="text-red-500">
                     This day is fully booked. Choose another date.
                   </p>
@@ -287,22 +278,36 @@ export default function CustomDesignPage() {
             <input
               type="file"
               accept="image/*"
+              multiple
               onChange={handleImageUpload}
               className="w-full p-2 border rounded"
             />
           </div>
 
-          {/* Show Uploaded Image */}
-          {formData.image && (
-            <div className="mb-3">
-              <img
-                src={formData.image}
-                alt="Uploaded Design"
-                className="rounded-lg shadow border" 
-                style={{ maxWidth: "300px", maxHeight: "300px" }} // 
-              />
-            </div>
-          )}
+        {/* Uploaded Images - Horizontal Scroll */}
+{formData.images && formData.images.length > 0 && (
+  <div className="mb-3 overflow-x-auto whitespace-nowrap flex gap-2 p-2 border rounded">
+    {formData.images.map((img, index) => (
+      <div key={index} className="relative flex-shrink-0">
+        <img
+          src={img}
+          alt={`Uploaded ${index}`}
+          className="rounded-lg shadow border object-cover"
+          style={{ width: "150px", height: "150px" }} // ✅ Adjust size
+        />
+        {/* Remove Button */}
+        <button
+          onClick={() => removeImage(index)}
+          className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
+        >
+          ✕
+        </button>
+      </div>
+    ))}
+  </div>
+)}
+
+
 
           {/* Measurements */}
           <h3 className="text-lg font-semibold mb-2">Your Measurements</h3>

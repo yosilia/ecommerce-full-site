@@ -64,15 +64,16 @@ export default function ProductBox({ _id, title, description, price, photos }) {
   return (
     <ProductWrapper>
       <WhiteBox href={url}>
-        <img src={photos[0]} alt={title} />
+        <img src={photos?.[0]} alt={title} />
       </WhiteBox>
       <ProductInfoBox>
         <Title href={url}>{title}</Title>
         <PriceRow>
           <PriceTag>£{price}</PriceTag>
           <Button onClick={() => addProduct(_id)}>
-            <CartIcon /> Add to cart
-          </Button>
+  <CartIcon className="w-4 h-4" /> Add to cart
+</Button>
+
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>

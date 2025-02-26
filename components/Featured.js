@@ -61,14 +61,10 @@ export default function Featured({product}) {
                         you’ll find something unique and special at DM Touch. 
                         Explore our latest featured products and elevate your wardrobe today!</Description>
                         <Button>Explore Collection</Button>
-                        {/* This button will navigate the user to all the products we currently 
-                        have in stock where they can the further filter by sorting by price etc
-                        onClick={addProductToCart} --- function to add products to cart 
-                        */}
                         </div>
                      </Column>
                 <Column>
-                    {/*<img src="/images/image 5.jpg"></img>*/}
+                   
                 </Column>
             
             </Center>

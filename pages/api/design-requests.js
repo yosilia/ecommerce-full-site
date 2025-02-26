@@ -6,23 +6,41 @@ export default async function handler(req, res) {
 
   if (req.method === "POST") {
     try {
-      const { clientName, clientEmail, phone, appointmentDate, appointmentTime, measurements, notes, image } = req.body;
-
-      // Check if this date already has 2 appointments
-      const existingAppointments = await DesignRequest.find({ appointmentDate });
-      if (existingAppointments.length >= 2) {
-        return res.status(400).json({ success: false, message: "This date is fully booked. Please choose another day." });
+      const { clientName, clientEmail, phone, appointmentDate, appointmentTime, measurements, notes, images } = req.body;
+      
+      if (!Array.isArray(images)) {
+        return res.status(400).json({ success: false, message: "Images must be an array." });
       }
+      // ✅ Check if required fields are missing
+    if (!clientName) {
+      return res.status(400).json({ success: false, message: "Please enter your name." });
+    }
+    if (!clientEmail) {
+      return res.status(400).json({ success: false, message: "Please enter your email." });
+    }
+    if (!phone) {
+      return res.status(400).json({ success: false, message: "Please enter your phone number." });
+    }
 
+    // ✅ Check if this date already has 5 appointments
+    const existingAppointments = await DesignRequest.find({ appointmentDate });
+    if (existingAppointments.length >= 5) {
+      return res.status(400).json({ success: false, message: "This date is fully booked. Please choose another day." });
+    }
       // Ensure `appointmentTime` is provided
       if (!appointmentTime) {
         return res.status(400).json({ success: false, message: "Appointment time is required." });
       }
 
-      // Validate image format before saving
-      if (image && typeof image !== "string") {
-        return res.status(400).json({ success: false, message: "Invalid image format. Expected a URL string." });
-      }
+      // ✅ Ensure images is an array of strings
+if (images && !Array.isArray(images)) {
+  return res.status(400).json({ success: false, message: "Invalid image format. Expected an array of URL strings." });
+}
+
+// ✅ Check if all elements in the array are strings (valid URLs)
+if (images.some(img => typeof img !== "string")) {
+  return res.status(400).json({ success: false, message: "Invalid image format. All images must be URLs." });
+}
 
       // Save the appointment
       const newRequest = await DesignRequest.create({
@@ -33,10 +51,10 @@ export default async function handler(req, res) {
         appointmentTime,
         measurements,
         notes,
-        image: image || "", // Store empty string if no image
+        images: images || [], // ✅ Store multiple images as an array
         status: "Pending", // ✅ Default status when created
       });
-
+      
       return res.status(201).json({ success: true, data: newRequest });
     } catch (error) {
       console.error("Error saving request:", error);
@@ -58,11 +76,12 @@ export default async function handler(req, res) {
         query.appointmentDate = date; // ✅ If date is provided, filter by date
       }
   
-      // ✅ Fetch all matching requests (sorted by latest)
+      // ✅ Fetch all matching requests
       const requests = await DesignRequest.find(query).sort({ createdAt: -1 });
+
   
       if (!requests.length) {
-        return res.status(404).json({ success: false, message: "No requests found." });
+        return res.status(200).json({ success: true, data: [] }); // ✅ Return empty array if no data
       }
   
       return res.status(200).json({ success: true, data: requests });
@@ -71,6 +90,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ success: false, message: "Failed to fetch requests." });
     }
   }
+  
   
   // ✅ PATCH request to update status
   if (req.method === "PATCH") {

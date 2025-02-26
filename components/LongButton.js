@@ -16,6 +16,7 @@ const SavingButton = styled.button`
   align-items: center;
   justify-content: center; 
   width: 100%; 
+  margin: "20px 0"
 
   &:hover {
     background-color: #000;
@@ -27,6 +28,6 @@ const SavingButton = styled.button`
   }
 `;
 
-export default function SaveButton({ children, ...props }) {
+export default function LongButton({ children, ...props }) {
   return <SavingButton {...props}>{children}</SavingButton>;
 }

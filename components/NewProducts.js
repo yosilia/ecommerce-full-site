@@ -1,12 +1,7 @@
 import styled from "styled-components";
 import Center from "./Center";
-import ProductBox from "./ProductBox";
+import ProductsGrid from "./ProductsGrid";
 
-const ProductsGrid = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-`;
 
 const H2Title = styled.h2`
     font size: 2rem;
@@ -18,11 +13,7 @@ export default function NewProducts({products}) {
     return (
         <Center>
             <H2Title>New Arrivals</H2Title>
-        <ProductsGrid>
-            {products?.length > 0 && products.map(product => (
-                <ProductBox {...product}/>
-            ))}
-        </ProductsGrid>    
+            <ProductsGrid products={products}/>
         </Center>
         
     );
