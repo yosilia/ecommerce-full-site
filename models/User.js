@@ -1,23 +1,16 @@
 import mongoose from "mongoose";
 
+// Define the User schema
 const UserSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  phone: { type: String },
-  city: { type: String },
-  country: { type: String },
-  streetAddress: { type: String },
-  postcode: { type: String },
-
-  // Add measurements to persist updates from admin or user
-  measurements: {
-    bust: { type: String },
-    length: { type: String },
-    width: { type: String },
-    waist: { type: String },
-    hips: { type: String },
-  },
+  name: { type: String, required: true }, // User's name
+  email: { type: String, required: true, unique: true }, // User's email, must be unique
+  password: { type: String, required: true }, // User's password
+  phone: { type: String }, // User's phone number
+  city: { type: String }, // User's city
+  country: { type: String }, // User's country
+  streetAddress: { type: String }, // User's street address
+  postcode: { type: String }, // User's postcode
 });
 
+// Export the User model
 export default mongoose.models.User || mongoose.model("User", UserSchema);
