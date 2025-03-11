@@ -10,6 +10,9 @@ import { mongooseConnect } from "@/lib/mongoose";
 import Product from "@/models/Product";
 import { useContext } from "react";
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import Link from 'next/link';
+
 
 const ColumnWrapper = styled.div`
   display: grid;
@@ -28,13 +31,49 @@ const Price = styled.span`
   font-size: 1.2rem;
 `;
 
+const RecommendationsWrapper = styled.div`
+  margin-top: 40px;
+`;
+
+const RecommendationList = styled.div`
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+`;
+
+const RecommendationCard = styled.a`
+  display: block;
+  width: 150px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+`;
+
+const RecommendationImage = styled.img`
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+`;
+
 export default function ProductPage({ product }) {
   const { addProduct } = useContext(CartContext);
+  const [recommendations, setRecommendations] = useState([]);
+
+  useEffect(() => {
+    async function fetchRecommendations() {
+      const res = await fetch(`/api/recommendations?id=${product._id}`);
+      const data = await res.json();
+      setRecommendations(data);
+    }
+    fetchRecommendations();
+  }, [product._id]);
+
   return (
     <>
       <Header />
-      <Center>
-        <ColumnWrapper>
+      <Center key={product._id}>
+      <ColumnWrapper>
           <WhiteBox>
             <ProductPhotos photos={product.photos}></ProductPhotos>
           </WhiteBox>
@@ -46,13 +85,33 @@ export default function ProductPage({ product }) {
                 <Price>£{product.price}</Price>
               </div>
               <div>
-              <Button onClick={() => addProduct(_id)}>
-  <CartIcon className="w-4 h-4" /> Add to cart
-</Button>
-
-               
+                <Button onClick={() => addProduct(_id)}>
+                  <CartIcon className="w-4 h-4" /> Add to cart
+                </Button>
               </div>
             </PriceRow>
+            <div style={{ marginTop: "40px" }}>
+            <RecommendationsWrapper>
+              <p>Recommended Products</p>
+              <RecommendationList>
+                {recommendations.map((recProduct) => (
+                  <Link key={recProduct._id} href={`/product/${recProduct._id}`} passHref>
+                    <RecommendationCard>
+                      <RecommendationImage
+                        src={
+                          recProduct.photos && recProduct.photos.length > 0
+                            ? recProduct.photos[0]
+                            : '/placeholder.jpg'
+                        }
+                        alt={recProduct.title}
+                      />
+                      <p>{recProduct.title}</p>
+                    </RecommendationCard>
+                  </Link>
+                ))}
+              </RecommendationList>
+            </RecommendationsWrapper>
+            </div>
           </div>
         </ColumnWrapper>
       </Center>

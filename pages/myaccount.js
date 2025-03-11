@@ -6,6 +6,10 @@ import { AuthContext } from "@/context/AuthContext";
 import LongButton from "@/components/LongButton";
 import Button from "@/components/Button";
 import Link from "next/link";
+import axios from "axios";
+import userOrderUpdates from "./api/hooks/userOrderUpdates";
+import userRequestUpdates from "./api/hooks/userRequestUpdates";
+
 
 const PageContainer = styled.div`
   padding: 40px;
@@ -69,6 +73,20 @@ const LogoutButton = styled.button`
   }
 `;
 
+const OrderItem = styled.div`
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 30px;
+  margin-bottom: 10px;
+`;
+
+const ScrollableContainer = styled.div`
+  max-height: 400px; 
+  overflow-y: auto;
+  padding-right: 10px; 
+`;
+
+
 export default function MyAccount() {
   const { user, setUser, loading } = useContext(AuthContext);
   const router = useRouter();
@@ -79,6 +97,7 @@ export default function MyAccount() {
   const [streetAddress, setStreetAddress] = useState("");
   const [postcode, setPostcode] = useState("");
   const [requests, setRequests] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -148,6 +167,39 @@ export default function MyAccount() {
     }
   };
 
+  // handling fetching orders
+
+  useEffect(() => {
+    if (user && user.email) {
+      axios
+        .get("/api/orders", { params: { email: user.email } })
+        .then((response) => {
+          setOrders(response.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching orders:", error);
+        });
+    }
+  }, [user]);
+
+  // Subscribe to Pusher updates
+  userOrderUpdates((update) => {
+    setOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order._id === update.orderId ? { ...order, orderStatus: update.orderStatus } : order
+      )
+    );
+  });
+
+  // Subscribe to real-time updates
+  userRequestUpdates((update) => {
+    setRequests((prevRequests) =>
+      prevRequests.map(req =>
+        req._id === update.requestId ? { ...req, status: update.status } : req
+      )
+    );
+  });
+
   if (loading) return <p>Loading...</p>; // Only show loading while fetching
 
   return (
@@ -198,12 +250,36 @@ export default function MyAccount() {
           {/* Order History */}
           <Box>
             <Title>Order History</Title>
-            <Input type="text" value="Order #12345" readOnly />
-            <Input type="text" value="Order #67890" readOnly />
+            {orders.length === 0 ? (
+              <p>No orders found.</p>
+            ) : (
+              <ScrollableContainer>
+              {orders.map((order) => (
+                <OrderItem key={order._id}>
+                  <Input type="text" value={`Order #${order._id}`} readOnly />
+                  <p>
+                    <strong>Status:</strong> {order.orderStatus}
+                  </p>
+                  <p>
+                  <strong>Date:</strong> {new Date(order.createdAt).toLocaleString()}
+                  </p>
+                  {/* Optionally, list product details */}
+                  {order.line_items.map((line, index) => (
+                    <p key={index}>
+                      {line.price_data?.product_data.name} x {line.quantity}
+                    </p>
+                  ))}
+                </OrderItem>
+                
+              ))}
+              </ScrollableContainer>
+
+            )}
           </Box>
 
           {/* User Requests Section */}
-          <Box style={{ maxHeight: "200px", overflowY: "auto" }}>
+          <Box>
+            <ScrollableContainer>
             <Title>Your Requests</Title>
             {requests.length === 0 ? (
               <p>No requests found.</p>
@@ -247,6 +323,7 @@ export default function MyAccount() {
                 </tbody>
               </table>
             )}
+            </ScrollableContainer>
           </Box>
 
           <Box>

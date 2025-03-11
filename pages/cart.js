@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import { CartContext, CartContextProvider } from "@/components/CartContext";
+import { CartContext } from "@/components/CartContext";
 import Center from "@/components/Center";
 import Header from "@/components/Header";
 import { useContext, useEffect, useState } from "react";
@@ -7,7 +7,6 @@ import styled from "styled-components";
 import axios from "axios";
 import StylingTable from "@/components/StylingTable";
 import InputStyling from "@/components/InputStyling";
-import { set } from "mongoose";
 
 const ColumnsWrapper = styled.div`
     display: grid;
@@ -64,17 +63,18 @@ export default function CartPage() {
     const [isSuccess, setIsSuccess] = useState(false);
 
     useEffect(() => {
+        console.log("cartProducts:", cartProducts);
         if (cartProducts.length > 0) {
-        axios.post('/api/cart', {ids:cartProducts})
-        .then(response => {
-            setProducts(response.data);
-        })
-    } else {
-        setProducts([]);
-    }
-    
+            axios.post('/api/cart', { ids: cartProducts })
+                .then(response => {
+                    console.log("API Response:", response.data); // Debug API response
+                    setProducts(response.data);
+                });
+        } else {
+            setProducts([]);
+        }
     }, [cartProducts]);
-
+    
     useEffect(() => { 
         if (typeof window === 'undefined') {
             return;
@@ -155,7 +155,7 @@ export default function CartPage() {
         </thead>
         <tbody>
          {products.map(product => (
-                <tr>
+                <tr key={product._id}>
                 <ProductImageStyling>
                     <ProductImageBox>
                     <img src={product.photos[0]} alt=''/>

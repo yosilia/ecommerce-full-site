@@ -49,15 +49,52 @@ const PaidStatus = styled.span`
   color: ${({ paid }) => (paid ? "#047857" : "#b91c1c")};
 `;
 
+const OrderStatusSelect = styled.select`
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  font-family: "Lora", serif;
+  background-color: #fff;
+  color: #333;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #666;
+  }
+`;
+
 export default function OrdersPage() {
-    const [orders, setOrders] = useState([]);
-    useEffect(() => {
-        axios.get("/api/orders").then((response) => {
-            setOrders(response.data);
-        });
-    }, []);
-    return (
-        <Layout>
+  const [orders, setOrders] = useState([]);
+  useEffect(() => {
+    axios.get("/api/orderTime").then((response) => {
+      setOrders(response.data);
+    });
+  }, []);
+
+  // In  admin component (simplified)
+  async function updateOrderStatus(orderId, newStatus) {
+    try {
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderStatus: newStatus }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert("Order status updated!");
+        // Refresh the orders list or update local state
+      } else {
+        alert("Error updating order status: " + data.message);
+      }
+    } catch (error) {
+      console.error("Update error:", error);
+    }
+  }
+
+  return (
+    <Layout>
       <Title>Orders</Title>
       <Table>
         <TableHeader>
@@ -66,6 +103,7 @@ export default function OrdersPage() {
             <TableHeadCell>Paid</TableHeadCell>
             <TableHeadCell>Recipient</TableHeadCell>
             <TableHeadCell>Products</TableHeadCell>
+            <TableHeadCell>Order Status</TableHeadCell>
           </TableRow>
         </TableHeader>
         <tbody>
@@ -97,6 +135,19 @@ export default function OrdersPage() {
                       {line.price_data?.product_data.name} x {line.quantity}
                     </div>
                   ))}
+                </TableCell>
+                <TableCell>
+                  <OrderStatusSelect
+                    defaultValue={order.orderStatus || "Processing"}
+                    onChange={(e) =>
+                      updateOrderStatus(order._id, e.target.value)
+                    }
+                  >
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </OrderStatusSelect>
                 </TableCell>
               </TableRow>
             ))}

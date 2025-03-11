@@ -1,6 +1,8 @@
-import { Schema, model, models } from 'mongoose';
+import mongoose from "mongoose";
+const { Schema, model, models } = mongoose;
 
-const OrderSchema = new Schema({
+const OrderSchema = new Schema(
+  {
     line_items: Object,
     name: String,
     email: String,
@@ -10,8 +12,15 @@ const OrderSchema = new Schema({
     country: String,
     phone: String,
     paid: Boolean,
-}, {
+    orderStatus: {
+      type: String,
+      enum: ["Processing", "Shipped", "Delivered", "Cancelled"],
+      default: "Processing",
+    },
+  },
+  {
     timestamps: true,
-});
+  }
+);
 
-export const Order = models?.Order || model('Order', OrderSchema);
+export default models.Order || model("Order", OrderSchema);

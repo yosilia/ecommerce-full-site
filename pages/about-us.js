@@ -4,6 +4,8 @@ import InputStyling from "@/components/InputStyling";
 import LongButton from "@/components/LongButton";
 import Title from "@/components/Title";
 import styled from "styled-components";
+import { useState } from "react";
+import axios from "axios";
 
 const ParagFormatting = styled.div`
   max-width: 800px;
@@ -37,6 +39,30 @@ const TextArea = styled.textarea`
 `;
 
 export default function AboutUsPage() {
+  const [formData, setFormData] = useState({
+    clientName: "",
+    clientEmail: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await axios.post("/api/general-queries", formData);
+      setMessage("Message sent successfully!");
+      setFormData({ clientName: "", clientEmail: "", message: "" });
+    } catch (error) {
+      setMessage("Failed to send message. Please try again.");
+    }
+
+    setLoading(false);
+  };
+
   return (
     <>
       <Header />
@@ -82,10 +108,34 @@ export default function AboutUsPage() {
           <ParagWriting>
             If you have any general queries, feel free to message us.
           </ParagWriting>
-          <InputStyling type="text" placeholder="Name" />
-          <InputStyling type="email" placeholder="E-mail" />
-          <TextArea placeholder="Message" />
-          <LongButton>Send Message</LongButton>
+         
+          <form onSubmit={handleSubmit}>
+          <InputStyling
+              type="text"
+              placeholder="Name"
+              value={formData.clientName}
+              onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+              required
+            />
+            <InputStyling
+              type="email"
+              placeholder="E-mail"
+              value={formData.clientEmail}
+              onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
+              required
+            />
+            <TextArea
+              placeholder="Message"
+              value={formData.message}
+              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              required
+            />
+            <LongButton type="submit" disabled={loading}>
+              {loading ? "Sending..." : "Send Message"}
+            </LongButton>
+          </form>
+          {message && <p>{message}</p>}
+
         </FormContainer>
       </Center>
     </>

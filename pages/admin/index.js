@@ -22,9 +22,7 @@ export default function Home() {
       const orders = ordersRes.data || [];
 
       // Calculate Total Revenue & Orders
-      const revenue = orders.reduce((sum, order) => sum + (order.totalPrice || 0), 0);
       setTotalOrders(orders.length);
-      setTotalRevenue(revenue);
 
       // Mock data for new leads & deals closed (Replace with real API if available)
       setNewLeads(orders.length * 0.7); // Example: 70% of orders are new leads

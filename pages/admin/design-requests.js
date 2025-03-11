@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import Layout from '@/components/Components/Layout';
-import { useRouter } from 'next/router';
-import styled from 'styled-components';
+import { useEffect, useState } from "react";
+import Layout from "@/components/Components/Layout";
+import { useRouter } from "next/router";
+import styled from "styled-components";
+import MeasurementsSection from "@/components/MeasurementsSection"; // Adjust the path as needed
 
 const Container = styled.div`
   background-color: white;
@@ -139,6 +140,7 @@ export default function DesignRequestsAdmin() {
   const [requests, setRequests] = useState([]);
   const [selectedRequest, setSelectedRequest] = useState(null); // ✅ State for selected request
   const [modalOpen, setModalOpen] = useState(false);
+  const [editedMeasurements, setEditedMeasurements] = useState({});
   const router = useRouter();
 
   useEffect(() => {
@@ -147,42 +149,70 @@ export default function DesignRequestsAdmin() {
 
   async function fetchRequests() {
     try {
-      const res = await fetch('/api/design-requests');
+      const res = await fetch("/api/design-requests");
       const data = await res.json();
       setRequests(data.data);
     } catch (error) {
-      console.error('Error fetching design requests:', error);
+      console.error("Error fetching design requests:", error);
     }
   }
 
   async function updateStatus(id, status) {
-    await fetch('/api/design-requests', {
-      method: 'PATCH', // ✅ Changed to PATCH since we're updating only the status
-      headers: { 'Content-Type': 'application/json' },
+    await fetch("/api/design-requests", {
+      method: "PATCH", // ✅ Changed to PATCH since we're updating only the status
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, status }),
     });
     fetchRequests();
   }
 
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0]; // Get today's date
+    const today = new Date().toISOString().split("T")[0]; // Get today's date
 
     requests.forEach(async (req) => {
-      if (req.status === 'In Progress' && req.appointmentDate < today) {
-        await updateStatus(req._id, 'Completed');
+      if (req.status === "In Progress" && req.appointmentDate < today) {
+        await updateStatus(req._id, "Completed");
       }
     });
   }, [requests]);
 
   function openModal(request) {
     setSelectedRequest(request);
+    setEditedMeasurements(request.measurements || {}); // Initialize state with existing measurements
     setModalOpen(true);
   }
 
   function closeModal() {
     setModalOpen(false);
     setSelectedRequest(null);
+    setEditedMeasurements({});
   }
+
+  async function handleSave() {
+    try {
+      const res = await fetch("/api/design-requests", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: selectedRequest._id,
+          measurements: editedMeasurements,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert("Measurements updated successfully!");
+        // Update the state with the updated design request data
+        setSelectedRequest(data.data);
+        setEditedMeasurements(data.data.measurements);
+        // If you maintain a list of requests, update that list too (if needed)
+      } else {
+        alert("Error updating measurements: " + data.message);
+      }
+    } catch (error) {
+      console.error("Update error:", error);
+    }
+  }
+  
 
   return (
     <Layout>
@@ -201,10 +231,15 @@ export default function DesignRequestsAdmin() {
             {requests.map((req) => (
               <TableRow key={req._id}>
                 <TableCell>{req.clientName}</TableCell>
-                <TableCell>{req.createdAt.replace("T", " ").substring(0, 19)}</TableCell>
+                <TableCell>
+                  {req.createdAt.replace("T", " ").substring(0, 19)}
+                </TableCell>
                 <TableCell>{req.status}</TableCell>
                 <TableCell>
-                  <Button onClick={() => updateStatus(req._id, "Completed")} variant="primary">
+                  <Button
+                    onClick={() => updateStatus(req._id, "Completed")}
+                    variant="primary"
+                  >
                     Complete
                   </Button>
                   <Button onClick={() => openModal(req)} variant="secondary">
@@ -222,21 +257,38 @@ export default function DesignRequestsAdmin() {
         <ModalOverlay>
           <ModalContent>
             <ModalTitle>Custom Design Request</ModalTitle>
-            <p><strong>Client Name:</strong> {selectedRequest.clientName}</p>
-            <p><strong>Email:</strong> {selectedRequest.clientEmail}</p>
-            <p><strong>Phone:</strong> {selectedRequest.phone}</p>
             <p>
-              <strong>Appointment Date:</strong> {selectedRequest.appointmentDate?.replace("T", " ").substring(0, 10) || "N/A"}
+              <strong>Client Name:</strong> {selectedRequest.clientName}
             </p>
-            <p><strong>Appointment Time:</strong> {selectedRequest?.appointmentTime}</p>
-            <p><strong>Notes:</strong> {selectedRequest.notes || "No additional notes"}</p>
+            <p>
+              <strong>Email:</strong> {selectedRequest.clientEmail}
+            </p>
+            <p>
+              <strong>Phone:</strong> {selectedRequest.phone}
+            </p>
+            <p>
+              <strong>Appointment Date:</strong>{" "}
+              {selectedRequest.appointmentDate
+                ?.replace("T", " ")
+                .substring(0, 10) || "N/A"}
+            </p>
+            <p>
+              <strong>Appointment Time:</strong>{" "}
+              {selectedRequest?.appointmentTime}
+            </p>
+            <p>
+              <strong>Notes:</strong>{" "}
+              {selectedRequest.notes || "No additional notes"}
+            </p>
 
-            <SectionTitle>Measurements</SectionTitle>
-            <p><strong>Bust:</strong> {selectedRequest.measurements?.bust || "N/A"}</p>
-            <p><strong>Length:</strong> {selectedRequest.measurements?.length || "N/A"}</p>
-            <p><strong>Width:</strong> {selectedRequest.measurements?.width || "N/A"}</p>
-            <p><strong>Waist:</strong> {selectedRequest.measurements?.waist || "N/A"}</p>
-            <p><strong>Hips:</strong> {selectedRequest.measurements?.hips || "N/A"}</p>
+            <div>
+              <SectionTitle>Measurements (Editable)</SectionTitle>
+              <MeasurementsSection
+                measurements={editedMeasurements}
+                setMeasurements={setEditedMeasurements}
+              />
+              <Button onClick={handleSave}>Save Changes</Button>
+            </div>
 
             {/* Uploaded Images */}
             {selectedRequest.images && selectedRequest.images.length > 0 && (
@@ -250,7 +302,9 @@ export default function DesignRequestsAdmin() {
                       alt={`Uploaded Image ${index + 1}`}
                       onClick={() => {
                         const newTab = window.open();
-                        newTab.document.write(`<img src="${img}" style="width:100%;">`);
+                        newTab.document.write(
+                          `<img src="${img}" style="width:100%;">`
+                        );
                       }}
                     />
                   ))}
@@ -266,12 +320,17 @@ export default function DesignRequestsAdmin() {
                   onClick={() => {
                     updateStatus(selectedRequest._id, "In Progress");
                     closeModal();
-                    router.push(`/admin/appointments?client=${selectedRequest.clientName}&date=${selectedRequest.appointmentDate}&time=${selectedRequest.appointmentTime}`);
+                    router.push(
+                      `/admin/appointments?client=${selectedRequest.clientName}&date=${selectedRequest.appointmentDate}&time=${selectedRequest.appointmentTime}`
+                    );
                   }}
                 >
                   Accept
                 </Button>
-                <Button variant="danger" onClick={() => updateStatus(selectedRequest._id, "Declined")}>
+                <Button
+                  variant="danger"
+                  onClick={() => updateStatus(selectedRequest._id, "Declined")}
+                >
                   Decline
                 </Button>
               </FlexContainer>
@@ -279,7 +338,9 @@ export default function DesignRequestsAdmin() {
 
             {/* Close Button */}
             <FlexContainer>
-              <Button onClick={closeModal} variant="secondary">Close</Button>
+              <Button onClick={closeModal} variant="secondary">
+                Close
+              </Button>
             </FlexContainer>
           </ModalContent>
         </ModalOverlay>

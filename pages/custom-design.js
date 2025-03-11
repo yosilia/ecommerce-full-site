@@ -3,6 +3,7 @@ import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import Button from "@/components/Button";
 import styled from "styled-components";
+import MeasurementsSection from "@/components/MeasurementsSection";
 
 const Input = styled.input`
   width: 100%;
@@ -39,7 +40,7 @@ export default function CustomDesignPage() {
     phone: "",
     appointmentDate: "",
     appointmentTime: "",
-    measurements: { length: "", width: "", bust: "", waist: "" },
+    measurements: {},
     notes: "",
     image: null,
   });
@@ -70,13 +71,36 @@ export default function CustomDesignPage() {
         clientName: user.name || prev.clientName,
         clientEmail: user.email || prev.clientEmail,
         phone: user.phone || prev.phone,
-        measurements: {
-          length: user.measurements?.length || prev.measurements.length,
-          width: user.measurements?.width || prev.measurements.width,
-          bust: user.measurements?.bust || prev.measurements.bust,
-          waist: user.measurements?.waist || prev.measurements.waist,
-        },
       }));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    async function fetchLatestRequest() {
+      try {
+        // Note: using ?email= since your API GET handler uses email as the query param
+        const res = await fetch(`/api/design-requests?email=${user.email}`);
+        const data = await res.json();
+        if (Array.isArray(data.data) && data.data.length > 0) {
+          // Sort requests by createdAt descending to get the latest one
+          const latestRequest = data.data.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          )[0];
+          setFormData((prev) => ({
+            ...prev,
+            measurements: {
+              ...prev.measurements,
+              ...latestRequest.measurements,
+            },
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching latest design request:", error);
+      }
+    }
+
+    if (user && user.email) {
+      fetchLatestRequest();
     }
   }, [user]);
 
@@ -93,8 +117,10 @@ export default function CustomDesignPage() {
     try {
       const response = await fetch(`/api/design-requests?date=${date}`);
       const data = await response.json();
-      setBookedAppointments(Array.isArray(data?.data) ? data.data.map((a) => a.appointmentTime) : []);
- // Extract booked times
+      setBookedAppointments(
+        Array.isArray(data?.data) ? data.data.map((a) => a.appointmentTime) : []
+      );
+      // Extract booked times
     } catch (error) {
       console.error("Error fetching appointments:", error);
     }
@@ -103,16 +129,16 @@ export default function CustomDesignPage() {
   async function handleImageUpload(e) {
     const files = Array.from(e.target.files); // Convert FileList to array
     if (!files.length) return;
-  
+
     const formData = new FormData();
     files.forEach((file) => formData.append("file", file));
-  
+
     try {
       const res = await fetch("/api/upload", {
         method: "POST",
         body: formData, // ✅ Sends multiple images
       });
-  
+
       const data = await res.json();
       if (data.links) {
         setFormData((prev) => ({
@@ -127,8 +153,6 @@ export default function CustomDesignPage() {
       alert("Failed to upload images.");
     }
   }
-  
-  
 
   function removeImage(index) {
     setFormData((prev) => ({
@@ -136,9 +160,7 @@ export default function CustomDesignPage() {
       images: prev.images.filter((_, i) => i !== index),
     }));
   }
-  
-  
-  
+
   // submitting request
 
   async function submitRequest(e) {
@@ -284,95 +306,48 @@ export default function CustomDesignPage() {
             />
           </div>
 
-        {/* Uploaded Images - Horizontal Scroll */}
-{formData.images && formData.images.length > 0 && (
-  <div className="mb-3 overflow-x-auto whitespace-nowrap flex gap-2 p-2 border rounded">
-    {formData.images.map((img, index) => (
-      <div key={index} className="relative flex-shrink-0">
-        <img
-          src={img}
-          alt={`Uploaded ${index}`}
-          className="rounded-lg shadow border object-cover"
-          style={{ width: "150px", height: "150px" }} // ✅ Adjust size
-        />
-        {/* Remove Button */}
-        <button
-          onClick={() => removeImage(index)}
-          className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
-        >
-          ✕
-        </button>
-      </div>
-    ))}
-  </div>
-)}
-
-
+          {/* Uploaded Images - Horizontal Scroll */}
+          {formData.images && formData.images.length > 0 && (
+            <div className="mb-3 overflow-x-auto whitespace-nowrap flex gap-2 p-2 border rounded">
+              {formData.images.map((img, index) => (
+                <div key={index} className="relative flex-shrink-0">
+                  <img
+                    src={img}
+                    alt={`Uploaded ${index}`}
+                    className="rounded-lg shadow border object-cover"
+                    style={{ width: "150px", height: "150px" }} // ✅ Adjust size
+                  />
+                  {/* Remove Button */}
+                  <button
+                    onClick={() => removeImage(index)}
+                    className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Measurements */}
-          <h3 className="text-lg font-semibold mb-2">Your Measurements</h3>
-          <Input
-            type="text"
-            placeholder="Length"
-            value={formData.measurements.length}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                measurements: {
-                  ...formData.measurements,
-                  length: e.target.value,
-                },
-              })
-            }
-            className="w-full p-2 mb-3 border rounded"
-          />
-          <Input
-            type="text"
-            placeholder="Width"
-            value={formData.measurements.width}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                measurements: {
-                  ...formData.measurements,
-                  width: e.target.value,
-                },
-              })
-            }
-            className="w-full p-2 mb-3 border rounded"
-          />
-          <Input
-            type="text"
-            placeholder="Bust"
-            value={formData.measurements.bust}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                measurements: {
-                  ...formData.measurements,
-                  bust: e.target.value,
-                },
-              })
-            }
-            className="w-full p-2 mb-3 border rounded"
-          />
-          <Input
-            type="text"
-            placeholder="Waist"
-            value={formData.measurements.waist}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                measurements: {
-                  ...formData.measurements,
-                  waist: e.target.value,
-                },
-              })
-            }
-            className="w-full p-2 mb-3 border rounded"
-          />
-        </Box>
+          <MeasurementsSection
+  measurements={formData.measurements}
+  setMeasurements={(newMeasurements) =>
+    setFormData((prev) => {
+      // If newMeasurements is a function updater, call it with the current measurements
+      const updatedMeasurements =
+        typeof newMeasurements === "function"
+          ? newMeasurements(prev.measurements)
+          : newMeasurements;
+      return {
+        ...prev,
+        measurements: { ...prev.measurements, ...updatedMeasurements },
+      };
+    })
+  }
+/>
 
+        </Box>
         <div style={{ display: "flex", margin: "20px" }}>
           <Button
             type="submit"

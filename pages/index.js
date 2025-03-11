@@ -30,7 +30,7 @@ export async function getServerSideProps() {
   await mongooseConnect();
 
   // Fetch new products
-  const newProducts = await Product.find({}).sort({ _id: -1 }).limit(10);
+  const newProducts = await Product.find({}, null, {sort: {'_id':-1}, limit:10});
 
   // Fetch categories
   const categories = await Category.find({}).lean();

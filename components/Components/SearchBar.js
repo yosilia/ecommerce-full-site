@@ -1,52 +1,59 @@
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import styled from "styled-components";
 
 export default function SearchBar() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
   const [searchableItems, setSearchableItems] = useState([]);
 
-  // Fetch products, orders, and settings dynamically
+  // Fetch products and orders dynamically
   useEffect(() => {
     async function fetchData() {
       try {
-        const productsRes = await fetch('/api/products');
-        const ordersRes = await fetch('/api/orders');
+        const productsRes = await fetch("/api/products");
+        const ordersRes = await fetch("/api/orders");
 
-        if (!productsRes.ok) throw new Error('Failed to fetch products');
-        if (!ordersRes.ok) throw new Error('Failed to fetch orders');
+        if (!productsRes.ok) throw new Error("Failed to fetch products");
+        if (!ordersRes.ok) throw new Error("Failed to fetch orders");
 
-        const products = await productsRes.json(); // ✅ Parse JSON safely
-        const orders = await ordersRes.json(); // ✅ Parse JSON safely
+        const productsData = await productsRes.json();
+        const ordersData = await ordersRes.json();
+
+        const products = productsData.data || [];
+        const orders = ordersData.data || [];
 
         setSearchableItems([
-          { name: 'Products', link: '/products' },
-          { name: 'Orders', link: '/orders' },
-          { name: 'Settings', link: '/settings' },
-          { name: 'Book Appointments', link: '/book-appointment' },
+          { name: "Products", link: "/admin/products" },
+          { name: "Categories", link: "/admin/categories" },
+          { name: "Design Request", link: "/admin/design-request" },
+          { name: "General Queries", link: "/admin/general-queries" },
+          { name: "Orders", link: "/admin/orders" },
+          { name: "Appointments", link: "/admin/appointments" },
           ...products.map((product) => ({
             name: product.name,
-            link: `/products/${product.id}`,
+            link: `/admin/products/${product._id}`,
           })),
           ...orders.map((order) => ({
-            name: `Order #${order.id}`,
-            link: `/orders/${order.id}`,
+            name: `Order #${order._id}`,
+            link: `/admin/orders/${order._id}`,
           })),
         ]);
       } catch (error) {
-        console.error('Error fetching search data:', error);
+        console.error("Error fetching search data:", error);
       }
     }
 
     fetchData();
   }, []);
 
-  // Handle Search Input
+  // Handle search input changes
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
 
-    // Filter items that match the search term
     if (term) {
       const filtered = searchableItems.filter((item) =>
         item.name.toLowerCase().includes(term)
@@ -57,31 +64,81 @@ export default function SearchBar() {
     }
   };
 
+  // Handle key down for Enter key press
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && filteredResults.length > 0) {
+      router.push(filteredResults[0].link);
+    }
+  };
+
   return (
-    <div className="relative w-1/3">
-      <input
+    <SearchBarContainer>
+      <SearchInput
         type="text"
-        placeholder="Search for products, orders, settings..."
+        placeholder="Search for products, orders etc..."
         value={searchTerm}
         onChange={handleSearch}
-        className="border border-gray-300 px-4 py-2 rounded-lg text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-300 hidden md:block"
+        onKeyDown={handleKeyDown}
       />
 
       {/* Display Search Results */}
       {filteredResults.length > 0 && (
-        <ul className="absolute top-full left-0 w-full bg-white shadow-md rounded-lg mt-1 z-10">
+        <ResultsList>
           {filteredResults.map((item, index) => (
-            <li
-              key={index}
-              className="p-3 border-b last:border-0 hover:bg-gray-100"
-            >
-              <Link href={item.link} className="text-gray-700 block">
-                {item.name}
-              </Link>
-            </li>
+            <ResultItem key={index}>
+              <Link href={item.link}>{item.name}</Link>
+            </ResultItem>
           ))}
-        </ul>
+        </ResultsList>
       )}
-    </div>
+    </SearchBarContainer>
   );
 }
+
+/* Styled Components */
+const SearchBarContainer = styled.div`
+  position: relative;
+  width: 50%;
+`;
+
+const SearchInput = styled.input`
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  width: 100%;
+  outline: none;
+  transition: box-shadow 0.2s;
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  }
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const ResultsList = styled.ul`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  margin-top: 0.25rem;
+  z-index: 10;
+  list-style: none;
+  padding: 0;
+`;
+
+const ResultItem = styled.li`
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  transition: background 0.2s;
+  &:last-child {
+    border-bottom: none;
+  }
+  &:hover {
+    background: #f3f4f6;
+  }
+`;
