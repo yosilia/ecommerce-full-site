@@ -1,18 +1,18 @@
-import Button from "@/components/Button";
-import { CartContext } from "@/components/CartContext";
-import Center from "@/components/Center";
-import Header from "@/components/Header";
-import CartIcon from "@/components/icons/CartIcon";
-import ProductPhotos from "@/components/ProductPhotos";
-import Title from "@/components/Title";
-import WhiteBox from "@/components/WhiteBox";
+import Button from "@/Components User/Button";
+import { CartContext } from "@/Components User/CartContext";
+import Center from "@/Components User/Center";
+import Header from "@/Components User/Header";
+import CartIcon from "@/Components User/icons/CartIcon";
+import ProductPhotos from "@/Components User/ProductPhotos";
+import Title from "@/Components User/Title";
+import WhiteBox from "@/Components User/WhiteBox";
 import { mongooseConnect } from "@/lib/mongoose";
 import Product from "@/models/Product";
 import { useContext } from "react";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
 import Link from 'next/link';
-
+import { useEffect, useState } from 'react';
+import VirtualTryOn from "@/Components User/VirtualTryOn"; 
 
 const ColumnWrapper = styled.div`
   display: grid;
@@ -41,12 +41,14 @@ const RecommendationList = styled.div`
   flex-wrap: wrap;
 `;
 
-const RecommendationCard = styled.a`
+const RecommendationCard = styled.div`
   display: block;
   width: 150px;
   text-align: center;
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
+
 `;
 
 const RecommendationImage = styled.img`
@@ -59,15 +61,40 @@ const RecommendationImage = styled.img`
 export default function ProductPage({ product }) {
   const { addProduct } = useContext(CartContext);
   const [recommendations, setRecommendations] = useState([]);
+  const [currentUserEmail, setCurrentUserEmail] = useState('');
+  const [showTryOn, setShowTryOn] = useState(false); // State for modal
 
+
+   // Fetch current user details on component mount
+   useEffect(() => {
+    async function fetchUser() {
+      const token = localStorage.getItem('token'); 
+      if (!token) return;
+      const res = await fetch('/api/auth/me', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const user = await res.json();
+      if (user && user.email) {
+        setCurrentUserEmail(user.email);
+      }
+    }
+    fetchUser();
+  }, []);
+  
+  // Fetch recommendations when product or user email changes
   useEffect(() => {
     async function fetchRecommendations() {
-      const res = await fetch(`/api/recommendations?id=${product._id}`);
+      // Pass an empty string if currentUserEmail is not defined
+      const res = await fetch(
+        `/api/ai-recommendations?productId=${product._id}&userEmail=${currentUserEmail || ''}`
+      );
       const data = await res.json();
       setRecommendations(data);
     }
     fetchRecommendations();
-  }, [product._id]);
+  }, [product._id, currentUserEmail]);
+  
+
 
   return (
     <>
@@ -90,6 +117,23 @@ export default function ProductPage({ product }) {
                 </Button>
               </div>
             </PriceRow>
+            {/* Virtual Try-On Button */}
+            <div style={{ marginTop: "20px" }}>
+              <Button onClick={() => setShowTryOn(true)}>
+                Try It On Virtually
+              </Button>
+            </div>
+            {/* Render Virtual Try-On modal if showTryOn is true */}
+            {showTryOn && (
+              <VirtualTryOn 
+                clothingImage={
+                  product.photos && product.photos.length > 0 
+                  ? product.photos[0] // Uses the first photo 
+                  : '/placeholder.jpg'
+                }
+                onClose={() => setShowTryOn(false)}
+              />
+            )}
             <div style={{ marginTop: "40px" }}>
             <RecommendationsWrapper>
               <p>Recommended Products</p>

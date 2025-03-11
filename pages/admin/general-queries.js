@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Layout from "@/components/Components/Layout";
+import Layout from "@/Components Admin/Layout";
 import styled from "styled-components";
 
 // Styled Components

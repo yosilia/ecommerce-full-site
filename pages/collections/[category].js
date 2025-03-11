@@ -1,8 +1,8 @@
 import React from "react";
-import Center from "@/components/Center";
-import Header from "@/components/Header";
-import ProductsGrid from "@/components/ProductsGrid";
-import Title from "@/components/Title";
+import Center from "@/Components User/Center";
+import Header from "@/Components User/Header";
+import ProductsGrid from "@/Components User/ProductsGrid";
+import Title from "@/Components User/Title";
 import { mongooseConnect } from "@/lib/mongoose";
 import Product from "@/models/Product";
 import Category from "@/models/Category";

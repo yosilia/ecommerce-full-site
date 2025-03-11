@@ -1,9 +1,9 @@
-import Header from "@/components/Header";
+import Header from "@/Components User/Header";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "@/context/AuthContext";
-import Button from "@/components/Button";
+import Button from "@/Components User/Button";
 import styled from "styled-components";
-import MeasurementsSection from "@/components/MeasurementsSection";
+import MeasurementsSection from "@/Components User/MeasurementsSection";
 
 const Input = styled.input`
   width: 100%;

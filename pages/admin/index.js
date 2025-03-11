@@ -1,6 +1,6 @@
-import Layout from '@/components/Components/Layout';
+import Layout from '@/Components Admin/Layout';
 import { useSession } from 'next-auth/react';
-import SearchBar from '@/components/Components/SearchBar';
+import SearchBar from '@/Components Admin/SearchBar';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import axios from 'axios';

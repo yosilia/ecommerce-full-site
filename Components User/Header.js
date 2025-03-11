@@ -1,8 +1,8 @@
 import Link from "next/link";
 import styled from "styled-components";
-import Center from "@/components/Center";
+import Center from "@/Components User/Center";
 import { useContext } from "react";
-import { CartContext } from "@/components/CartContext";
+import { CartContext } from "@/Components User/CartContext";
 
 const StyledHeader = styled.header`
   background-color: transparent;

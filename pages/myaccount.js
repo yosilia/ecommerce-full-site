@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import Header from "@/components/Header";
+import Header from "@/Components User/Header";
 import { AuthContext } from "@/context/AuthContext";
-import LongButton from "@/components/LongButton";
-import Button from "@/components/Button";
+import LongButton from "@/Components User/LongButton";
+import Button from "@/Components User/Button";
 import Link from "next/link";
 import axios from "axios";
 import userOrderUpdates from "./api/hooks/userOrderUpdates";

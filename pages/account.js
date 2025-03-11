@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import Header from "@/components/Header";
+import Header from "@/Components User/Header";
 import { AuthContext } from "@/context/AuthContext";
 
 const PageContainer = styled.div`
