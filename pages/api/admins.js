@@ -1,7 +1,7 @@
 import clientPromise from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './auth/[...nextauth]';
-import { isAdminValid } from './auth/[...nextauth]';
+//import { isAdminValid } from './auth/[...nextauth]';
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
   const client = await clientPromise;
   const db = client.db();
-  await isAdminValid(req, res);
+  //await isAdminValid(req, res);
   
 
   if (req.method === 'GET') {

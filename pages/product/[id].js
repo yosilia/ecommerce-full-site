@@ -62,7 +62,8 @@ export default function ProductPage({ product }) {
   const { addProduct } = useContext(CartContext);
   const [recommendations, setRecommendations] = useState([]);
   const [currentUserEmail, setCurrentUserEmail] = useState('');
-  const [showTryOn, setShowTryOn] = useState(false); // State for modal
+  const [showTryOn, setShowTryOn] = useState(false); 
+  // State for modal
 
 
    // Fetch current user details on component mount
@@ -112,7 +113,7 @@ export default function ProductPage({ product }) {
                 <Price>£{product.price}</Price>
               </div>
               <div>
-                <Button onClick={() => addProduct(_id)}>
+                <Button onClick={() => addProduct(product._id)}>
                   <CartIcon className="w-4 h-4" /> Add to cart
                 </Button>
               </div>

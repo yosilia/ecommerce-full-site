@@ -1,6 +1,6 @@
 import Center from "@/Components User/Center";
 import Header from "@/Components User/Header";
-import InputStyling from "@/Components User/InputStyling";
+import Input from "@/Components User/CommonStyles";
 import LongButton from "@/Components User/LongButton";
 import Title from "@/Components User/Title";
 import styled from "styled-components";
@@ -110,14 +110,14 @@ export default function AboutUsPage() {
           </ParagWriting>
          
           <form onSubmit={handleSubmit}>
-          <InputStyling
+          <Input
               type="text"
               placeholder="Name"
               value={formData.clientName}
               onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
               required
             />
-            <InputStyling
+            <Input
               type="email"
               placeholder="E-mail"
               value={formData.clientEmail}

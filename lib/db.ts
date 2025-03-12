@@ -31,5 +31,5 @@ if (process.env.NODE_ENV === "development") {
   clientPromise = client.connect();
 }
 
-// ✅ Export the promise instead of the client
+// Export the promise instead of the client
 export default clientPromise;

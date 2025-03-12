@@ -10,19 +10,24 @@ async function sendOrderUpdateEmail(clientEmail, clientName, orderId, orderStatu
   });
 
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: `"DM Touch" <${process.env.EMAIL_USER}>`,
     to: clientEmail,
     subject: `Order Update - Order #${orderId}`,
     text: `Dear ${clientName},
-
-Your order (Order #${orderId}) has been updated to the following status: ${orderStatus}.
-
-Thank you for shopping with us!
-
-Best regards,
-DM Touch Team`,
+  
+  We are writing to inform you that the status of your order (Order #${orderId}) has been updated to: 
+  
+  ${orderStatus}
+  
+  Thank you for choosing DM Touch for your shopping needs.
+  
+  If you have any questions or require further assistance, please feel free to contact our support team.
+  
+  Best regards,
+  The DM Touch Team
+    `,
   };
-
+  
   try {
     await transporter.sendMail(mailOptions);
     console.log(`Order update email sent to ${clientEmail}`);

@@ -31,7 +31,7 @@ export default async function handler(req, res) {
           .status(400)
           .json({ success: false, message: "Images must be an array." });
       }
-      // ✅ Check if required fields are missing
+      // Check if required fields are missing
       if (!clientName) {
         return res
           .status(400)
@@ -48,7 +48,7 @@ export default async function handler(req, res) {
           .json({ success: false, message: "Please enter your phone number." });
       }
 
-      // ✅ Check if this date already has 5 appointments
+      // Check if this date already has 5 appointments
       const existingAppointments = await DesignRequest.find({
         appointmentDate,
       });
@@ -67,7 +67,7 @@ export default async function handler(req, res) {
           .json({ success: false, message: "Appointment time is required." });
       }
 
-      // ✅ Ensure images is an array of strings
+      // Ensure images is an array of strings
       if (images && !Array.isArray(images)) {
         return res
           .status(400)
@@ -77,7 +77,7 @@ export default async function handler(req, res) {
           });
       }
 
-      // ✅ Check if all elements in the array are strings (valid URLs)
+      // Check if all elements in the array are strings (valid URLs)
       if (images.some((img) => typeof img !== "string")) {
         return res
           .status(400)
@@ -96,8 +96,8 @@ export default async function handler(req, res) {
         appointmentTime,
         measurements,
         notes,
-        images: images || [], // ✅ Store multiple images as an array
-        status: "Pending", // ✅ Default status when created
+        images: images || [], // Store multiple images as an array
+        status: "Pending", // Default status when created
       });
 
       return res.status(201).json({ success: true, data: newRequest });
@@ -111,23 +111,23 @@ export default async function handler(req, res) {
 
   if (req.method === "GET") {
     try {
-      const { date, email } = req.query; // ✅ Get both query parameters
+      const { date, email } = req.query; // Get both query parameters
 
-      let query = {}; // ✅ Initialize empty query object
+      let query = {}; // Initialize empty query object
 
       if (email) {
-        query.clientEmail = email; // ✅ If email is provided, filter by email
+        query.clientEmail = email; // If email is provided, filter by email
       }
 
       if (date) {
-        query.appointmentDate = date; // ✅ If date is provided, filter by date
+        query.appointmentDate = date; // If date is provided, filter by date
       }
 
-      // ✅ Fetch all matching requests
+      // Fetch all matching requests
       const requests = await DesignRequest.find(query).sort({ createdAt: -1 });
 
       if (!requests.length) {
-        return res.status(200).json({ success: true, data: [] }); // ✅ Return empty array if no data
+        return res.status(200).json({ success: true, data: [] }); // Return empty array if no data
       }
 
       return res.status(200).json({ success: true, data: requests });

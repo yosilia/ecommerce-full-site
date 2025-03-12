@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
   await mongooseConnect();
-  const { email, phone, city, country, streetAddress, postcode, length, width, bust, waist } = req.body;
+  const { email, phone, city, country, streetAddress, postcode } = req.body;
 
   try {
     const user = await User.findOneAndUpdate(
@@ -16,10 +16,6 @@ export default async function handler(req, res) {
         country,
         streetAddress,
         postcode,
-        length,
-        width,
-        bust,
-        waist,
       },
       { new: true }
     );

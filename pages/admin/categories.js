@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { withSwal } from 'react-sweetalert2';
 import styled from 'styled-components';
-import InputStyling from '@/Components User/InputStyling';
+import { Input } from '@/Components User/CommonStyles';
 const Title = styled.h1`
   font-size: 1.75rem;
   font-weight: 600;
@@ -25,18 +25,6 @@ const Form = styled.form`
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 `;
 
-const Input = styled.input`
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  outline: none;
-
-  &:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
-  }
-`;
 
 const Select = styled.select`
   width: 100%;

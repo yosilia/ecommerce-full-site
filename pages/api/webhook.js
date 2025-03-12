@@ -27,13 +27,13 @@ export default async function handler(req, res) {
                 }
                 break;
             default:
-                console.log(`⚠️ Unhandled event type ${event.type}.`);
+                console.log(`Unhandled event type ${event.type}.`);
         }
 
         res.status(200).send('ok'); 
 
     } catch (err) {
-        console.log(`⚠️ Webhook signature verification failed:`, err.message);
+        console.log(`Webhook signature verification failed:`, err.message);
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 }

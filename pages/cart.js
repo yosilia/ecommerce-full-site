@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import StylingTable from "@/Components User/StylingTable";
-import InputStyling from "@/Components User/InputStyling";
+import { Input } from "@/Components User/CommonStyles";
 
 const ColumnsWrapper = styled.div`
     display: grid;
@@ -188,21 +188,21 @@ export default function CartPage() {
       {!!cartProducts?.length > 0 && (
         <Box>
                 <h2>Order Information</h2>
-                <InputStyling 
+                <Input 
                 type="text" 
                 placeholder="Name" 
                 value={name}
                 name="name"
                 onChange={e => setName(e.target.value)}
                 />
-                <InputStyling 
+                <Input 
                 type="email" 
                 placeholder="Email" 
                 value={email}
                 name="email"
                 onChange={e => setEmail(e.target.value)}
                 />
-                <InputStyling 
+                <Input 
                 type="tel"  
                 placeholder="Phone" 
                 value={phone}
@@ -217,14 +217,14 @@ export default function CartPage() {
                         }
                         }} />
                 <CityHolder>
-                <InputStyling 
+                <Input 
                 type="text" 
                 placeholder="Street Address" 
                 value={streetAddress}
                 name="streetAddress"
                 onChange={e => setStreetAddress(e.target.value)}
                 />
-                <InputStyling 
+                <Input 
                 type="text" 
                 placeholder="Country" 
                 value={country}
@@ -232,14 +232,14 @@ export default function CartPage() {
                 onChange={e => setCountry(e.target.value)}
                 />  
                 </CityHolder>
-                <InputStyling 
+                <Input 
                 type="text" 
                 placeholder="City" 
                 value={city}
                 name="city"
                 onChange={e => setCity(e.target.value)}
                 />
-                <InputStyling 
+                <Input 
                 type="text" 
                 placeholder="Postcode" 
                 value={postcode}

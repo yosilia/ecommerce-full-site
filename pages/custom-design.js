@@ -1,7 +1,7 @@
 import Header from "@/Components User/Header";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "@/context/AuthContext";
-import Button from "@/Components User/Button";
+import Button, { ButtonStyle } from "@/Components User/Button";
 import styled from "styled-components";
 import MeasurementsSection from "@/Components User/MeasurementsSection";
 
@@ -136,14 +136,14 @@ export default function CustomDesignPage() {
     try {
       const res = await fetch("/api/upload", {
         method: "POST",
-        body: formData, // ✅ Sends multiple images
+        body: formData, // Sends multiple images
       });
 
       const data = await res.json();
       if (data.links) {
         setFormData((prev) => ({
           ...prev,
-          images: [...(prev.images || []), ...data.links], // ✅ Store all images in an array
+          images: [...(prev.images || []), ...data.links], // Store all images in an array
         }));
       } else {
         alert("Image upload failed.");
@@ -315,15 +315,15 @@ export default function CustomDesignPage() {
                     src={img}
                     alt={`Uploaded ${index}`}
                     className="rounded-lg shadow border object-cover"
-                    style={{ width: "150px", height: "150px" }} // ✅ Adjust size
+                    style={{ width: "150px", height: "150px" }} // Adjust size
                   />
                   {/* Remove Button */}
-                  <button
+                  <Button
                     onClick={() => removeImage(index)}
                     className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
                   >
                     ✕
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
@@ -331,22 +331,24 @@ export default function CustomDesignPage() {
 
           {/* Measurements */}
           <MeasurementsSection
-  measurements={formData.measurements}
-  setMeasurements={(newMeasurements) =>
-    setFormData((prev) => {
-      // If newMeasurements is a function updater, call it with the current measurements
-      const updatedMeasurements =
-        typeof newMeasurements === "function"
-          ? newMeasurements(prev.measurements)
-          : newMeasurements;
-      return {
-        ...prev,
-        measurements: { ...prev.measurements, ...updatedMeasurements },
-      };
-    })
-  }
-/>
-
+            measurements={formData.measurements}
+            setMeasurements={(newMeasurements) =>
+              setFormData((prev) => {
+                // If newMeasurements is a function updater, call it with the current measurements
+                const updatedMeasurements =
+                  typeof newMeasurements === "function"
+                    ? newMeasurements(prev.measurements)
+                    : newMeasurements;
+                return {
+                  ...prev,
+                  measurements: {
+                    ...prev.measurements,
+                    ...updatedMeasurements,
+                  },
+                };
+              })
+            }
+          />
         </Box>
         <div style={{ display: "flex", margin: "20px" }}>
           <Button

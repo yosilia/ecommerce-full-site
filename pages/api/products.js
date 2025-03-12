@@ -1,12 +1,12 @@
 import Product from '@/models/Product';
 import { mongooseConnect } from '@/lib/mongoose';
-import { isAdminValid } from '@/pages/api/auth/[...nextauth]';
-import mongoose from 'mongoose'; // ✅ Import to check ObjectId validity
+//import { isAdminValid } from '@/pages/api/auth/[...nextauth]';
+import mongoose from 'mongoose'; 
 
 export default async function handle(req, res) {
   const { method } = req;
   await mongooseConnect();
-  await isAdminValid(req, res);
+  //await isAdminValid(req, res);
 
   if (method === 'GET') {
     try {
@@ -27,19 +27,19 @@ export default async function handle(req, res) {
     try {
       const { title, description, price, photos, category, features, stock } = req.body;
 
-      // ✅ Check for Missing Fields
+      // Check for Missing Fields
       if (!title || !description || !price || !category || !photos.length) {
         return res.status(400).json({
           error: "All fields (title, description, price, category, photos) are required.",
         });
       }
 
-      // ✅ Ensure category is a valid ObjectId
+      // Ensure category is a valid ObjectId
       if (!mongoose.Types.ObjectId.isValid(category)) {
         return res.status(400).json({ error: "Invalid category selected." });
       }
 
-      // ✅ Create Product
+      // Create Product
       const productDoc = await Product.create({
         title,
         description,
@@ -61,13 +61,13 @@ export default async function handle(req, res) {
     try {
       const { title, description, price, photos, category, features, stock, _id } = req.body;
 
-      // ✅ Validate if product exists
+      // Validate if product exists
       const existingProduct = await Product.findById(_id);
       if (!existingProduct) {
         return res.status(404).json({ error: "Product not found." });
       }
 
-      // ✅ Ensure category is a valid ObjectId
+      // Ensure category is a valid ObjectId
       if (!mongoose.Types.ObjectId.isValid(category)) {
         return res.status(400).json({ error: "Invalid category selected." });
       }

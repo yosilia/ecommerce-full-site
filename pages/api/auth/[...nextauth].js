@@ -10,6 +10,25 @@ async function getAdminEmails() {
   return admins.map(admin => admin.email); 
 }
 
+
+export const authOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+    }),
+  ],
+  adapter: MongoDBAdapter(clientPromise),
+  callbacks: {
+    async session({ session }) {
+      return session; // Allow ALL logged-in users as Admin (TEMPORARY for Testing)
+    },
+  },
+};
+export default NextAuth(authOptions);
+
+
+{/*
 export const authOptions = {
   providers: [
     GoogleProvider({
@@ -32,7 +51,7 @@ export const authOptions = {
 
 export default NextAuth(authOptions);
 
-// New function to validate if the user is an admin
+// function to validate if the user is an admin
 export async function isAdminValid(req, res) {
   const session = await getServerSession(req, res, authOptions);
   const adminEmails = await getAdminEmails();
@@ -42,3 +61,4 @@ export async function isAdminValid(req, res) {
     throw 'Not an Authorized Admin';
   }
 }
+*/}

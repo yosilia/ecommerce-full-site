@@ -118,7 +118,7 @@ export default function CategoryPage({ products, categoryName, features }) {
   const { query } = router;
   const [searchTerm, setSearchTerm] = useState(query.search || "");
 
- // ✅ Handle Sorting
+ // Handle Sorting
  function handleSortChange(e) {
   const selectedSort = e.target.value;
   router.replace({
@@ -127,7 +127,7 @@ export default function CategoryPage({ products, categoryName, features }) {
   });
 }
 
-// ✅ Handle Search Input Change
+// Handle Search Input Change
 function handleSearchChange(e) {
   const newSearch = e.target.value;
   setSearchTerm(newSearch);
@@ -143,7 +143,7 @@ return (
         {categoryName ? `${categoryName} Collection` : "Category Not Found"}
       </Title>
 
-      {/* 🔹 Sorting & Search Bar Container */}
+      {/* Sorting & Search Bar Container */}
       <SortContainer>
         <SortLabel>Sort By:</SortLabel>
         <SortSelect onChange={handleSortChange} value={query.sort || "newest"}>
@@ -153,7 +153,7 @@ return (
           <option value="price-high-low">Price: High to Low</option>
         </SortSelect>
 
-        {/* 🔹 Search Bar */}
+        {/* Search Bar */}
         <SearchInput
           type="text"
           placeholder="Search our clothing..."
@@ -178,9 +178,7 @@ return (
 
 export async function getServerSideProps(context) {
   await mongooseConnect();
-  const { category, sort, search, ...filters } = context.query; // ✅ Includes search & filters
-
-  console.log("🔍 Searching for Category:", category);
+  const { category, sort, search, ...filters } = context.query; // Includes search & filters
 
   const categoryData = await Category.findOne({ slug: category });
 
@@ -194,14 +192,14 @@ export async function getServerSideProps(context) {
     };
   }
 
-  // ✅ Ensure `features` exist and are properly formatted
+  // Ensure `features` exist and are properly formatted
   const availableFeatures =
     categoryData.features?.map((feature) => ({
       name: feature.name,
       values: feature.values || [],
     })) || [];
 
-  // ✅ Sorting logic
+  // Sorting logic
   let sortQuery = { _id: -1 }; // Default: Newest First
 
   if (sort === "price-low-high") {
@@ -212,7 +210,7 @@ export async function getServerSideProps(context) {
     sortQuery = { _id: 1 };
   }
 
-  // ✅ Apply filters based on selected features
+  // Apply filters based on selected features
   let productFilter = { category: categoryData._id };
 
   Object.keys(filters).forEach((feature) => {
@@ -221,26 +219,22 @@ export async function getServerSideProps(context) {
     }
   });
 
-  // ✅ Apply search filter (if any)
+  // Apply search filter (if any)
   if (search) {
     productFilter.title = { $regex: search, $options: "i" };
   }
 
-  console.log("🔍 Product Filter:", productFilter);
-
-  // ✅ Fetch sorted & filtered products
+  // Fetch sorted & filtered products
   const products = await Product.find(productFilter)
     .populate("category")
     .select("title photos price category features")
     .sort(sortQuery);
 
-  console.log("✅ Products Sorted & Filtered:", products);
-
   return {
     props: {
       categoryName: categoryData.name,
       products: JSON.parse(JSON.stringify(products)),
-      features: JSON.parse(JSON.stringify(availableFeatures)), // ✅ Ensures it's always an array
+      features: JSON.parse(JSON.stringify(availableFeatures)), // Ensures it's always an array
     },
   };
 }

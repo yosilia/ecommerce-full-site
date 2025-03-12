@@ -16,13 +16,17 @@ export default async function handler(req, res) {
 
   // Email message
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: `"DM Touch" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: "Verify Your Email - DM Touch",
-    html: `<h3>Welcome, ${name}!</h3>
-           <p>Thank you for signing up. Please verify your email by clicking the link below:</p>
-           <a href=" http://localhost:3000/verify?email=${email}" style="color:blue; font-weight:bold;">Verify Your Email</a>`,
+    html: `
+      <h3>Welcome, ${name}!</h3>
+      <p>Thank you for signing up. Please verify your email by clicking the link below:</p>
+      <a href="http://localhost:3000/verify?email=${email}" style="color: blue; font-weight: bold;">Verify Your Email</a>
+      <p>If you did not create an account, please ignore this email.</p>
+    `,
   };
+  
 
   try {
     await transporter.sendMail(mailOptions);

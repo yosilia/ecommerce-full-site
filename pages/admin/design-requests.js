@@ -138,7 +138,7 @@ const ImagePreview = styled.img`
 
 export default function DesignRequestsAdmin() {
   const [requests, setRequests] = useState([]);
-  const [selectedRequest, setSelectedRequest] = useState(null); // ✅ State for selected request
+  const [selectedRequest, setSelectedRequest] = useState(null); // State for selected request
   const [modalOpen, setModalOpen] = useState(false);
   const [editedMeasurements, setEditedMeasurements] = useState({});
   const router = useRouter();
@@ -159,7 +159,7 @@ export default function DesignRequestsAdmin() {
 
   async function updateStatus(id, status) {
     await fetch("/api/design-requests", {
-      method: "PATCH", // ✅ Changed to PATCH since we're updating only the status
+      method: "PATCH", // Changed to PATCH since we're updating only the status
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, status }),
     });

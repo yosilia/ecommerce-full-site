@@ -84,6 +84,8 @@ export default function Header({ showBackground = true, children }) {
     "/custom-design",
     "/collections/all-items",
     "/admin",
+    "/forgot-password",
+    "/reset-password",
   ];
   // Check if the current page is explicitly listed or falls under the /product/* folder
   const isBackgroundHidden =

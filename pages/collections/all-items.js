@@ -189,7 +189,7 @@ export default function AllItemsPage({ products, features }) {
     const [showFilters, setShowFilters] = useState(false); // Toggle for Filters UI
     const selectedFilters = query.features ? query.features.split(",") : [];
   
-    // ✅ Handle Sorting
+    // Handle Sorting
     function handleSortChange(e) {
       const selectedSort = e.target.value;
       router.replace({
@@ -198,7 +198,7 @@ export default function AllItemsPage({ products, features }) {
       });
     }
   
-    // ✅ Handle Search Input Change
+    // Handle Search Input Change
     function handleSearchChange(e) {
       const newSearch = e.target.value;
       setSearchTerm(newSearch);
@@ -206,7 +206,7 @@ export default function AllItemsPage({ products, features }) {
       router.replace({ pathname: router.pathname, query: newQuery });
     }
   
-    // ✅ Handle Multiple Feature Filter Changes
+    // Handle Multiple Feature Filter Changes
     function handleFeatureChange(value) {
       let updatedFilters = [...selectedFilters];
   
@@ -232,7 +232,7 @@ export default function AllItemsPage({ products, features }) {
         <Center>
           <Title style={{ textAlign: "center" }}>All Items</Title>
   
-          {/* 🔹 Filters & Sorting Section */}
+          {/* Filters & Sorting Section */}
           <SortContainer>
             <SortLabel>Sort By:</SortLabel>
             <SortSelect onChange={handleSortChange} value={query.sort || "newest"}>
@@ -242,7 +242,7 @@ export default function AllItemsPage({ products, features }) {
               <option value="price-high-low">Price: High to Low</option>
             </SortSelect>
   
-            {/* 🔹 Search Bar */}
+            {/* Search Bar */}
             <SearchInput
               type="text"
               placeholder="Search products..."
@@ -250,13 +250,13 @@ export default function AllItemsPage({ products, features }) {
               onChange={handleSearchChange}
             />
   
-            {/* 🔹 Filters Button */}
+            {/* Filters Button */}
             <FilterButton onClick={() => setShowFilters(!showFilters)}>
               {showFilters ? "Hide Filters" : "Show Filters"}
             </FilterButton>
           </SortContainer>
   
-          {/* 🔹 Filters UI (Only shown when `showFilters` is true) */}
+          {/* Filters UI (Only shown when `showFilters` is true) */}
           {showFilters && (
             <FilterContainer>
               {features?.length > 0 && (
@@ -291,14 +291,14 @@ export default function AllItemsPage({ products, features }) {
     );
   }
   
-  // ✅ Fetch all products & unique feature values from all categories
+  // Fetch all products & unique feature values from all categories
   export async function getServerSideProps(context) {
     await mongooseConnect();
     const { sort, features, search } = context.query;
   
     let productFilter = {}; // Filter object for MongoDB query
   
-    // ✅ Apply Multiple Feature Filtering (Filters across all categories)
+    // Apply Multiple Feature Filtering (Filters across all categories)
     if (features) {
       const selectedFeatures = features.split(",");
       const categoriesWithFeatures = await Category.find(
@@ -309,12 +309,12 @@ export default function AllItemsPage({ products, features }) {
       productFilter.category = { $in: categoryIds };
     }
   
-    // ✅ Apply Search Filtering (Partial match on product title)
+    // Apply Search Filtering (Partial match on product title)
     if (search) {
       productFilter.title = { $regex: search, $options: "i" };
     }
   
-    // ✅ Determine Sorting Order
+    // Determine Sorting Order
     let sortQuery = { _id: -1 }; // Default: Newest First
     if (sort === "price-low-high") {
       sortQuery = { price: 1 };
@@ -324,10 +324,10 @@ export default function AllItemsPage({ products, features }) {
       sortQuery = { _id: 1 };
     }
   
-    // ✅ Fetch sorted & filtered products
+    // Fetch sorted & filtered products
     const products = await Product.find(productFilter).populate("category").sort(sortQuery);
   
-    // ✅ Fetch all unique feature values from **categories**
+    // Fetch all unique feature values from **categories**
     const categories = await Category.find({}, "features");
     const featureValues = [
       ...new Set(

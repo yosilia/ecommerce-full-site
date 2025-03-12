@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
-import Logo from "./logo";
 import styled from "styled-components";
 
 // Styled Components
@@ -26,14 +25,10 @@ const Sidebar = styled.aside`
 const LogoContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 1.5rem;
-
   img {
     width: 40px;
     height: 40px;
   }
-
   h1 {
     font-weight: bold;
     color: white;
@@ -77,6 +72,8 @@ const LogoutButton = styled.button`
   cursor: pointer;
   transition: color 0.3s ease;
   font-family: "Lora";
+  font-size: 16px;
+  height: 24px;
   &:hover {
     color: #d1d5db;
   }
@@ -124,11 +121,12 @@ export default function Navbar({ show }) {
 
   return (
     <Sidebar show={show}>
-      {/* Logo Section */}
-      <LogoContainer>
-        <img src="/logo.png" alt="DM Touch Logo" />
-        <h1>DM Touch</h1>
-      </LogoContainer>
+      <StyledLink href="/admin">
+        <LogoContainer>
+          <img src="/logo.png" alt="DM Touch Logo" />
+          <h1>DM Touch</h1>
+        </LogoContainer>
+      </StyledLink>
 
       {/* Navigation Links */}
       <NavList>

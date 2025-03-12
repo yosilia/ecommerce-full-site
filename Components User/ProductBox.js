@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useContext } from "react";
 import { CartContext } from "./CartContext";
 
-
 const ProductWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -59,8 +58,8 @@ const PriceTag = styled.div`
 `;
 
 export default function ProductBox({ _id, title, description, price, photos }) {
-  const {addProduct} = useContext(CartContext);
-  const url = '/product/'+_id;
+  const { addProduct } = useContext(CartContext);
+  const url = "/product/" + _id;
   return (
     <ProductWrapper>
       <WhiteBox href={url}>
@@ -71,12 +70,10 @@ export default function ProductBox({ _id, title, description, price, photos }) {
         <PriceRow>
           <PriceTag>£{price}</PriceTag>
           <Button onClick={() => addProduct(_id)}>
-  <CartIcon className="w-4 h-4" /> Add to cart
-</Button>
-
+            <CartIcon className="w-4 h-4" /> Add to cart
+          </Button>
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>
   );
 }
-

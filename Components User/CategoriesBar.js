@@ -62,7 +62,7 @@ export default function CategoriesBar({ categories }) {
           {categories.map((category, index) => (
             <Link
             key={index}
-            href={`/collections/${category.slug || category._id}`} // ✅ Ensure slug or fallback to _id
+            href={`/collections/${category.slug || category._id}`} // Ensure slug or fallback to _id
             passHref
           >
             <CategoryWrapper>

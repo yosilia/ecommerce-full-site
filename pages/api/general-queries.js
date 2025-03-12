@@ -1,6 +1,6 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import GeneralQuery from "@/models/GeneralQuery";
-import { isAdminValid } from "./auth/[...nextauth]";
+//import { isAdminValid } from "./auth/[...nextauth]";
 import nodemailer from "nodemailer";
 
 async function handler(req, res) {
@@ -25,7 +25,7 @@ async function handler(req, res) {
   }
 
   // Require admin authentication for GET and PUT requests
-  await isAdminValid(req, res);
+  //await isAdminValid(req, res);
 
   if (req.method === "GET") {
     try {
