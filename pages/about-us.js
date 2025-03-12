@@ -1,6 +1,6 @@
 import Center from "@/Components User/Center";
 import Header from "@/Components User/Header";
-import Input from "@/Components User/CommonStyles";
+import { Input } from "@/Components User/CommonStyles";
 import LongButton from "@/Components User/LongButton";
 import Title from "@/Components User/Title";
 import styled from "styled-components";
