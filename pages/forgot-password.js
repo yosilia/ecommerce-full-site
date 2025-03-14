@@ -1,6 +1,6 @@
-import Header from "@/Components User/Header";
+import Header from "@/ComponentsUser/Header";
 import { useState } from "react";
-import { PageContainer, Box, Title, Input, Button } from "@/Components User/CommonStyles";
+import { PageContainer, Box, Title, Input, Button } from "@/ComponentsUser/CommonStyles";
 
 
 export default function ForgotPasswordPage() {

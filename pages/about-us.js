@@ -1,8 +1,8 @@
-import Center from "@/Components User/Center";
-import Header from "@/Components User/Header";
-import { Input } from "@/Components User/CommonStyles";
-import LongButton from "@/Components User/LongButton";
-import Title from "@/Components User/Title";
+import Center from "@/ComponentsUser/Center";
+import Header from "@/ComponentsUser/Header";
+import { Input } from "@/ComponentsUser/CommonStyles";
+import LongButton from "@/ComponentsUser/LongButton";
+import Title from "@/ComponentsUser/Title";
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";

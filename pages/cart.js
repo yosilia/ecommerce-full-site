@@ -1,12 +1,12 @@
-import Button from "@/Components User/Button";
-import { CartContext } from "@/Components User/CartContext";
-import Center from "@/Components User/Center";
-import Header from "@/Components User/Header";
+import Button from "@/ComponentsUser/Button";
+import { CartContext } from "@/ComponentsUser/CartContext";
+import Center from "@/ComponentsUser/Center";
+import Header from "@/ComponentsUser/Header";
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import StylingTable from "@/Components User/StylingTable";
-import { Input } from "@/Components User/CommonStyles";
+import StylingTable from "@/ComponentsUser/StylingTable";
+import { Input } from "@/ComponentsUser/CommonStyles";
 
 const ColumnsWrapper = styled.div`
     display: grid;

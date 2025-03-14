@@ -1,9 +1,9 @@
-import Layout from '@/Components Admin/Layout';
+import Layout from '@/ComponentsAdmin/Layout';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { withSwal } from 'react-sweetalert2';
 import styled from 'styled-components';
-import { Input } from '@/Components User/CommonStyles';
+import { Input } from '@/ComponentsUser/CommonStyles';
 const Title = styled.h1`
   font-size: 1.75rem;
   font-weight: 600;

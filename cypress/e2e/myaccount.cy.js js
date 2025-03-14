@@ -1,0 +1,71 @@
+/**
+ * @file cypress/e2e/myaccount.cy.js
+ */
+
+describe("MyAccount Page E2E", () => {
+  beforeEach(() => {
+    // Clear localStorage before each test
+    cy.clearLocalStorage();
+  });
+
+  it("redirects to /account if not logged in", () => {
+    // Visit the page without a token
+    cy.visit("/myaccount");
+    // The user should be redirected to the login page
+    cy.url().should("include", "/account");
+  });
+
+  it("displays user's info if logged in", () => {
+    // Set a fake token to simulate a logged-in user
+    window.localStorage.setItem("token", "fake-jwt-token");
+    cy.visit("/myaccount");
+    // Check if the welcome message is displayed
+    cy.contains("Welcome").should("exist");
+  });
+
+  it("shows 'No orders found.' when there are no orders", () => {
+    // Intercept the orders API to return an empty list
+    cy.intercept("GET", "/api/orders*", {
+      statusCode: 200,
+      body: { data: [] },
+    }).as("getOrders");
+
+    window.localStorage.setItem("token", "fake-jwt-token");
+    cy.visit("/myaccount");
+    cy.wait("@getOrders");
+    cy.contains("No orders found.").should("be.visible");
+  });
+
+  it("displays orders with details when they exist", () => {
+    // Intercept orders API to return sample order data matching your structure
+    cy.intercept("GET", "/api/orders*", {
+      statusCode: 200,
+      body: {
+        data: [
+          {
+            _id: "order123",
+            orderStatus: "In Progress",
+            createdAt: "2025-01-01T12:00:00Z",
+            line_items: [
+              {
+                price_data: { product_data: { name: "Product A" } },
+                quantity: 2,
+              },
+            ],
+          },
+        ],
+      },
+    }).as("getOrders");
+
+    window.localStorage.setItem("token", "fake-jwt-token");
+    cy.visit("/myaccount");
+    cy.wait("@getOrders");
+
+    // Check if the order header is displayed
+    cy.contains("Order #order123").should("be.visible");
+    // Check if the order status is displayed correctly
+    cy.contains("In Progress").should("be.visible");
+    // Check if the product details are visible
+    cy.contains("Product A x 2").should("be.visible");
+  });
+});

@@ -1,4 +1,4 @@
-import Layout from "@/Components Admin/Layout";
+import Layout from "@/ComponentsAdmin/Layout";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import axios from "axios";

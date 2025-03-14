@@ -1,4 +1,4 @@
-import Layout from "@/Components Admin/Layout";
+import Layout from "@/ComponentsAdmin/Layout";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
