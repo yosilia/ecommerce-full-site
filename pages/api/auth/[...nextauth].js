@@ -21,24 +21,6 @@ export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),
   callbacks: {
     async session({ session }) {
-      return session; // Allow ALL logged-in users as Admin (TEMPORARY for Testing)
-    },
-  },
-};
-export default NextAuth(authOptions);
-
-
-{/*
-export const authOptions = {
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
-    }),
-  ],
-  adapter: MongoDBAdapter(clientPromise),
-  callbacks: {
-    async session({ session }) {
       const adminEmails = await getAdminEmails();
       if (adminEmails.includes(session?.user?.email)) {
         return session;
@@ -61,4 +43,3 @@ export async function isAdminValid(req, res) {
     throw 'Not an Authorized Admin';
   }
 }
-*/}

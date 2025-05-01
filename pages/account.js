@@ -28,17 +28,17 @@ export default function AccountPage() {
     if (res.ok) {
       localStorage.setItem("token", data.token);
   
-      // 1️⃣ Fetch updated user data from the API
+      // Fetch updated user data from the API
       const userRes = await fetch("/api/auth/me", {
         headers: { Authorization: `Bearer ${data.token}` },
       });
   
       if (userRes.ok) {
         const userData = await userRes.json();
-        setUser(userData); // 2️⃣ Update AuthContext with fetched user data
+        setUser(userData); // Update AuthContext with fetched user data
       }
   
-      // 3️⃣ Ensure redirect happens AFTER state updates
+      // Ensure redirect happens AFTER state updates
       router.push("/myaccount");
     } else {
       alert(data.message);

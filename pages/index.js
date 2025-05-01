@@ -19,8 +19,8 @@ export default function Home({ newProducts, categories }) {
       <div style={{ padding: "20px", textAlign: "center" }}>
         <h1>Welcome {user ? user.name : ""}</h1>
       </div>
-      <CategoriesBar categories={categories} />
       <Featured />
+      <CategoriesBar categories={categories} />
       <NewProducts products={newProducts} />
     </div>
   );

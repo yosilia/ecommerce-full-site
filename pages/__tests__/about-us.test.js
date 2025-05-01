@@ -1,6 +1,6 @@
 
 import React from "react";
-import "@testing-library/jest-dom"; // Provides matchers like toBeInTheDocument()
+import "@testing-library/jest-dom"; 
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import AboutUsPage from "@/pages/about-us";
 import axios from "axios";

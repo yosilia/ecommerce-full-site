@@ -72,8 +72,6 @@ export default function CategoriesBar({ categories }) {
               </CategoryCard>
             </CategoryWrapper>
           </Link>
-          
-          
           ))}
         </Wrapper>
       </Center>

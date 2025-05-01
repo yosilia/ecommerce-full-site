@@ -13,6 +13,10 @@ const Input = styled.input`
   border-radius: 8px;
   font-size: 14px;
   font-family: "Lora", serif;
+  @media (max-width: 768px) {
+    padding: 6px;
+    font-size: 13px;
+  }
 `;
 
 const Box = styled.div`
@@ -20,6 +24,9 @@ const Box = styled.div`
   border-radius: 10px;
   padding: 40px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
 `;
 
 const Select = styled.select`
@@ -30,6 +37,10 @@ const Select = styled.select`
   border-radius: 8px;
   font-size: 14px;
   font-family: "Lora", serif;
+  @media (max-width: 768px) {
+    padding: 6px;
+    font-size: 13px;
+  }
 `;
 
 export default function CustomDesignPage() {
@@ -120,7 +131,6 @@ export default function CustomDesignPage() {
       setBookedAppointments(
         Array.isArray(data?.data) ? data.data.map((a) => a.appointmentTime) : []
       );
-      // Extract booked times
     } catch (error) {
       console.error("Error fetching appointments:", error);
     }
@@ -130,20 +140,20 @@ export default function CustomDesignPage() {
     const files = Array.from(e.target.files); // Convert FileList to array
     if (!files.length) return;
 
-    const formData = new FormData();
-    files.forEach((file) => formData.append("file", file));
+    const formDataForUpload = new FormData();
+    files.forEach((file) => formDataForUpload.append("file", file));
 
     try {
       const res = await fetch("/api/upload", {
         method: "POST",
-        body: formData, // Sends multiple images
+        body: formDataForUpload,
       });
 
       const data = await res.json();
       if (data.links) {
         setFormData((prev) => ({
           ...prev,
-          images: [...(prev.images || []), ...data.links], // Store all images in an array
+          images: [...(prev.images || []), ...data.links],
         }));
       } else {
         alert("Image upload failed.");
@@ -162,7 +172,6 @@ export default function CustomDesignPage() {
   }
 
   // submitting request
-
   async function submitRequest(e) {
     e.preventDefault();
 
@@ -243,8 +252,6 @@ export default function CustomDesignPage() {
             {formData.appointmentDate && (
               <>
                 <p>Select an available time:</p>
-
-                {/* Check if the selected day is Sunday == 0 */}
                 {new Date(formData.appointmentDate).getDay() === 0 ? (
                   <p className="text-red-500">
                     This day is unavailable for booking.
@@ -290,7 +297,7 @@ export default function CustomDesignPage() {
               setFormData({ ...formData, notes: e.target.value })
             }
             className="w-full p-2 mb-3 border rounded"
-          ></Input>
+          />
 
           {/* Image Upload */}
           <div className="mb-3">
@@ -315,9 +322,8 @@ export default function CustomDesignPage() {
                     src={img}
                     alt={`Uploaded ${index}`}
                     className="rounded-lg shadow border object-cover"
-                    style={{ width: "150px", height: "150px" }} // Adjust size
+                    style={{ width: "150px", height: "150px" }}
                   />
-                  {/* Remove Button */}
                   <Button
                     onClick={() => removeImage(index)}
                     className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
@@ -334,7 +340,6 @@ export default function CustomDesignPage() {
             measurements={formData.measurements}
             setMeasurements={(newMeasurements) =>
               setFormData((prev) => {
-                // If newMeasurements is a function updater, call it with the current measurements
                 const updatedMeasurements =
                   typeof newMeasurements === "function"
                     ? newMeasurements(prev.measurements)

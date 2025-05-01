@@ -19,6 +19,11 @@ const SortContainer = styled.div`
   padding: 10px;
   background: #f9f9f9;
   border-radius: 8px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
 const SortLabel = styled.label`
@@ -28,29 +33,6 @@ const SortLabel = styled.label`
   color: #333;
 `;
 
-const ResetButton = styled.button`
-  background-color: #f44336;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-
-  &:hover {
-    background-color: #d32f2f;
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-`;
 
 const CheckboxGroup = styled.div`
   display: flex;
@@ -103,6 +85,7 @@ const SortSelect = styled.select`
   transition: all 0.2s ease-in-out;
   outline: none;
   font-family: "lora", serif;
+
   &:hover {
     border-color: #666;
   }
@@ -121,39 +104,14 @@ const FilterContainer = styled.div`
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 20px;
-`;
 
-const FilterGroup = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  align-items: center;
-`;
-
-const FilterLabel = styled.label`
-  font-weight: 500;
-  color: #333;
-`;
-
-const FilterSelect = styled.select`
-  padding: 8px 12px;
-  border: 2px solid #ddd;
-  border-radius: 6px;
-  font-size: 1rem;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    border-color: #666;
-  }
-
-  &:focus {
-    border-color: #000;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
   }
 `;
 
- const FilterButton = styled.button`
+const FilterButton = styled.button`
   padding: 0.5rem 1rem;
   border: none;
   background-color: black;
@@ -163,184 +121,191 @@ const FilterSelect = styled.select`
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
+
   &:hover {
     background-color: #333;
   }
 `;
 
 const SearchInput = styled.input`
- padding: 4px 8px;
-   width: 250px;
+  padding: 4px 8px;
   border: 2px solid #ddd;
   border-radius: 6px;
   font-size: 1rem;
   outline: none;
   transition: all 0.2s ease-in-out;
-    font-family: "lora", serif;
+  font-family: "lora", serif;
+
   &:focus {
     border-color: #000;
+  }
+
+  @media (min-width: 768px) {
+    width: 100%;
   }
 `;
 
 export default function AllItemsPage({ products, features }) {
-    const router = useRouter();
-    const { query } = router;
-    const [searchTerm, setSearchTerm] = useState(query.search || "");
-    const [showFilters, setShowFilters] = useState(false); // Toggle for Filters UI
-    const selectedFilters = query.features ? query.features.split(",") : [];
-  
-    // Handle Sorting
-    function handleSortChange(e) {
-      const selectedSort = e.target.value;
-      router.replace({
-        pathname: router.pathname,
-        query: { ...query, sort: selectedSort },
-      });
+  const router = useRouter();
+  const { query } = router;
+  const [searchTerm, setSearchTerm] = useState(query.search || "");
+  const [showFilters, setShowFilters] = useState(false); // Toggle for Filters UI
+  const selectedFilters = query.features ? query.features.split(",") : [];
+
+  // Handle Sorting
+  function handleSortChange(e) {
+    const selectedSort = e.target.value;
+    router.replace({
+      pathname: router.pathname,
+      query: { ...query, sort: selectedSort },
+    });
+  }
+
+  // Handle Search Input Change
+  function handleSearchChange(e) {
+    const newSearch = e.target.value;
+    setSearchTerm(newSearch);
+    const newQuery = { ...query, search: newSearch || undefined };
+    router.replace({ pathname: router.pathname, query: newQuery });
+  }
+
+  // Handle Multiple Feature Filter Changes
+  function handleFeatureChange(value) {
+    let updatedFilters = [...selectedFilters];
+
+    if (updatedFilters.includes(value)) {
+      updatedFilters = updatedFilters.filter((item) => item !== value); // Remove if exists
+    } else {
+      updatedFilters.push(value); // Add if not exists
     }
-  
-    // Handle Search Input Change
-    function handleSearchChange(e) {
-      const newSearch = e.target.value;
-      setSearchTerm(newSearch);
-      const newQuery = { ...query, search: newSearch || undefined };
-      router.replace({ pathname: router.pathname, query: newQuery });
+
+    const newQuery = { ...query };
+    if (updatedFilters.length > 0) {
+      newQuery.features = updatedFilters.join(","); // Store as CSV in URL
+    } else {
+      delete newQuery.features; // Remove filter if empty
     }
-  
-    // Handle Multiple Feature Filter Changes
-    function handleFeatureChange(value) {
-      let updatedFilters = [...selectedFilters];
-  
-      if (updatedFilters.includes(value)) {
-        updatedFilters = updatedFilters.filter((item) => item !== value); // Remove if exists
-      } else {
-        updatedFilters.push(value); // Add if not exists
-      }
-  
-      const newQuery = { ...query };
-      if (updatedFilters.length > 0) {
-        newQuery.features = updatedFilters.join(","); // Store as CSV in URL
-      } else {
-        delete newQuery.features; // Remove filter if empty
-      }
-  
-      router.replace({ pathname: router.pathname, query: newQuery });
-    }
-  
-    return (
-      <>
-        <Header />
-        <Center>
-          <Title style={{ textAlign: "center" }}>All Items</Title>
-  
-          {/* Filters & Sorting Section */}
-          <SortContainer>
-            <SortLabel>Sort By:</SortLabel>
-            <SortSelect onChange={handleSortChange} value={query.sort || "newest"}>
-              <option value="newest">Newest First</option>
-              <option value="oldest">Oldest First</option>
-              <option value="price-low-high">Price: Low to High</option>
-              <option value="price-high-low">Price: High to Low</option>
-            </SortSelect>
-  
-            {/* Search Bar */}
-            <SearchInput
-              type="text"
-              placeholder="Search products..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-  
-            {/* Filters Button */}
-            <FilterButton onClick={() => setShowFilters(!showFilters)}>
-              {showFilters ? "Hide Filters" : "Show Filters"}
-            </FilterButton>
-          </SortContainer>
-  
-          {/* Filters UI (Only shown when `showFilters` is true) */}
-          {showFilters && (
-            <FilterContainer>
-              {features?.length > 0 && (
-                <>
-                  <SortLabel>Filter By Features:</SortLabel>
-                  <CheckboxGroup>
-                    {features.map((value) => (
-                      <CheckboxLabel key={value}>
-                        <CheckboxInput
-                          type="checkbox"
-                          checked={selectedFilters.includes(value)}
-                          onChange={() => handleFeatureChange(value)}
-                        />
-                        {value}
-                      </CheckboxLabel>
-                    ))}
-                  </CheckboxGroup>
-                </>
-              )}
-            </FilterContainer>
-          )}
-  
-          {products.length > 0 ? (
-            <ProductsGrid products={products} />
-          ) : (
-            <p style={{ textAlign: "center", fontSize: "18px", color: "red" }}>
-              No products found.
-            </p>
-          )}
-        </Center>
-      </>
+
+    router.replace({ pathname: router.pathname, query: newQuery });
+  }
+
+  return (
+    <>
+      <Header />
+      <Center>
+        <Title style={{ textAlign: "center" }}>All Items</Title>
+
+        {/* Filters & Sorting Section */}
+        <SortContainer>
+          <SortLabel>Sort By:</SortLabel>
+          <SortSelect onChange={handleSortChange} value={query.sort || "newest"}>
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="price-low-high">Price: Low to High</option>
+            <option value="price-high-low">Price: High to Low</option>
+          </SortSelect>
+
+          {/* Search Bar */}
+          <SearchInput
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+
+          {/* Filters Button */}
+          <FilterButton onClick={() => setShowFilters(!showFilters)}>
+            {showFilters ? "Hide Filters" : "Show Filters"}
+          </FilterButton>
+        </SortContainer>
+
+        {/* Filters UI (Only shown when `showFilters` is true) */}
+        {showFilters && (
+          <FilterContainer>
+            {features?.length > 0 && (
+              <>
+                <SortLabel>Filter By Features:</SortLabel>
+                <CheckboxGroup>
+                  {features.map((value) => (
+                    <CheckboxLabel key={value}>
+                      <CheckboxInput
+                        type="checkbox"
+                        checked={selectedFilters.includes(value)}
+                        onChange={() => handleFeatureChange(value)}
+                      />
+                      {value}
+                    </CheckboxLabel>
+                  ))}
+                </CheckboxGroup>
+              </>
+            )}
+          </FilterContainer>
+        )}
+
+        {products.length > 0 ? (
+          <ProductsGrid products={products} />
+        ) : (
+          <p style={{ textAlign: "center", fontSize: "18px", color: "red" }}>
+            No products found.
+          </p>
+        )}
+      </Center>
+    </>
+  );
+}
+
+// Fetch all products & unique feature values from all categories
+export async function getServerSideProps(context) {
+  await mongooseConnect();
+  const { sort, features, search } = context.query;
+
+  let productFilter = {}; // Filter object for MongoDB query
+
+  // Apply Multiple Feature Filtering (Filters across all categories)
+  if (features) {
+    const selectedFeatures = features.split(",");
+    const categoriesWithFeatures = await Category.find(
+      { "features.values": { $in: selectedFeatures } },
+      "_id"
     );
+    const categoryIds = categoriesWithFeatures.map((category) => category._id);
+    productFilter.category = { $in: categoryIds };
   }
-  
-  // Fetch all products & unique feature values from all categories
-  export async function getServerSideProps(context) {
-    await mongooseConnect();
-    const { sort, features, search } = context.query;
-  
-    let productFilter = {}; // Filter object for MongoDB query
-  
-    // Apply Multiple Feature Filtering (Filters across all categories)
-    if (features) {
-      const selectedFeatures = features.split(",");
-      const categoriesWithFeatures = await Category.find(
-        { "features.values": { $in: selectedFeatures } },
-        "_id"
-      );
-      const categoryIds = categoriesWithFeatures.map((category) => category._id);
-      productFilter.category = { $in: categoryIds };
-    }
-  
-    // Apply Search Filtering (Partial match on product title)
-    if (search) {
-      productFilter.title = { $regex: search, $options: "i" };
-    }
-  
-    // Determine Sorting Order
-    let sortQuery = { _id: -1 }; // Default: Newest First
-    if (sort === "price-low-high") {
-      sortQuery = { price: 1 };
-    } else if (sort === "price-high-low") {
-      sortQuery = { price: -1 };
-    } else if (sort === "oldest") {
-      sortQuery = { _id: 1 };
-    }
-  
-    // Fetch sorted & filtered products
-    const products = await Product.find(productFilter).populate("category").sort(sortQuery);
-  
-    // Fetch all unique feature values from **categories**
-    const categories = await Category.find({}, "features");
-    const featureValues = [
-      ...new Set(
-        categories.flatMap((category) =>
-          category.features.flatMap((feature) => feature.values)
-        )
-      ),
-    ];
-  
-    return {
-      props: {
-        products: JSON.parse(JSON.stringify(products)),
-        features: JSON.parse(JSON.stringify(featureValues)), // Ensure unique feature values
-      },
-    };
+
+  // Apply Search Filtering (Partial match on product title)
+  if (search) {
+    productFilter.title = { $regex: search, $options: "i" };
   }
+
+  // Determine Sorting Order
+  let sortQuery = { _id: -1 }; // Default: Newest First
+  if (sort === "price-low-high") {
+    sortQuery = { price: 1 };
+  } else if (sort === "price-high-low") {
+    sortQuery = { price: -1 };
+  } else if (sort === "oldest") {
+    sortQuery = { _id: 1 };
+  }
+
+  // Fetch sorted & filtered products
+  const products = await Product.find(productFilter)
+    .populate("category")
+    .sort(sortQuery);
+
+  // Fetch all unique feature values from **categories**
+  const categories = await Category.find({}, "features");
+  const featureValues = [
+    ...new Set(
+      categories.flatMap((category) =>
+        category.features.flatMap((feature) => feature.values)
+      )
+    ),
+  ];
+
+  return {
+    props: {
+      products: JSON.parse(JSON.stringify(products)),
+      features: JSON.parse(JSON.stringify(featureValues)),
+    },
+  };
+}

@@ -9,7 +9,6 @@ import Category from "@/models/Category";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useEffect } from "react";
 
 const NoProductsContainer = styled.div`
   text-align: center;
@@ -30,6 +29,12 @@ const SortContainer = styled.div`
   padding: 10px;
   background: #f9f9f9;
   border-radius: 8px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+  }
 `;
 
 const SortLabel = styled.label`
@@ -49,10 +54,11 @@ const SortSelect = styled.select`
   transition: all 0.2s ease-in-out;
   outline: none;
   font-family: "lora", serif;
+  
   &:hover {
     border-color: #666;
   }
-
+  
   &:focus {
     border-color: #000;
   }
@@ -89,27 +95,32 @@ const FilterSelect = styled.select`
   background: white;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-
+  
   &:hover {
     border-color: #666;
   }
-
+  
   &:focus {
     border-color: #000;
   }
 `;
 
 const SearchInput = styled.input`
- padding: 4px 8px;
-   width: 250px;
+  padding: 4px 8px;
+  width: 250px;
   border: 2px solid #ddd;
   border-radius: 6px;
   font-size: 1rem;
   outline: none;
   transition: all 0.2s ease-in-out;
-    font-family: "lora", serif;
+  font-family: "lora", serif;
+  
   &:focus {
     border-color: #000;
+  }
+  
+  @media (max-width: 768px) {
+    width: 100%;
   }
 `;
 
@@ -118,67 +129,65 @@ export default function CategoryPage({ products, categoryName, features }) {
   const { query } = router;
   const [searchTerm, setSearchTerm] = useState(query.search || "");
 
- // Handle Sorting
- function handleSortChange(e) {
-  const selectedSort = e.target.value;
-  router.replace({
-    pathname: router.pathname,
-    query: { ...query, sort: selectedSort },
-  });
+  // Handle Sorting
+  function handleSortChange(e) {
+    const selectedSort = e.target.value;
+    router.replace({
+      pathname: router.pathname,
+      query: { ...query, sort: selectedSort },
+    });
+  }
+
+  // Handle Search Input Change
+  function handleSearchChange(e) {
+    const newSearch = e.target.value;
+    setSearchTerm(newSearch);
+    const newQuery = { ...query, search: newSearch || undefined };
+    router.replace({ pathname: router.pathname, query: newQuery });
+  }
+
+  return (
+    <>
+      <Header />
+      <Center>
+        <Title style={{ textAlign: "center" }}>
+          {categoryName ? `${categoryName} Collection` : "Category Not Found"}
+        </Title>
+
+        {/* Sorting & Search Bar Container */}
+        <SortContainer>
+          <SortLabel>Sort By:</SortLabel>
+          <SortSelect onChange={handleSortChange} value={query.sort || "newest"}>
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="price-low-high">Price: Low to High</option>
+            <option value="price-high-low">Price: High to Low</option>
+          </SortSelect>
+
+          {/* Search Bar */}
+          <SearchInput
+            type="text"
+            placeholder="Search our clothing..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </SortContainer>
+
+        {products.length > 0 ? (
+          <ProductsGrid products={products} />
+        ) : (
+          <p style={{ textAlign: "center", fontSize: "18px", color: "red" }}>
+            No products found in this category.
+          </p>
+        )}
+      </Center>
+    </>
+  );
 }
-
-// Handle Search Input Change
-function handleSearchChange(e) {
-  const newSearch = e.target.value;
-  setSearchTerm(newSearch);
-  const newQuery = { ...query, search: newSearch || undefined };
-  router.replace({ pathname: router.pathname, query: newQuery });
-}
-
-return (
-  <>
-    <Header />
-    <Center>
-      <Title style={{ textAlign: "center" }}>
-        {categoryName ? `${categoryName} Collection` : "Category Not Found"}
-      </Title>
-
-      {/* Sorting & Search Bar Container */}
-      <SortContainer>
-        <SortLabel>Sort By:</SortLabel>
-        <SortSelect onChange={handleSortChange} value={query.sort || "newest"}>
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-          <option value="price-low-high">Price: Low to High</option>
-          <option value="price-high-low">Price: High to Low</option>
-        </SortSelect>
-
-        {/* Search Bar */}
-        <SearchInput
-          type="text"
-          placeholder="Search our clothing..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-      </SortContainer>
-
-      {products.length > 0 ? (
-        <ProductsGrid products={products} />
-      ) : (
-        <p style={{ textAlign: "center", fontSize: "18px", color: "red" }}>
-          No products found in this category.
-        </p>
-      )}
-    </Center>
-  </>
-);
-}
-
-// Styled Component for better UI
 
 export async function getServerSideProps(context) {
   await mongooseConnect();
-  const { category, sort, search, ...filters } = context.query; // Includes search & filters
+  const { category, sort, search, ...filters } = context.query;
 
   const categoryData = await Category.findOne({ slug: category });
 
@@ -192,15 +201,13 @@ export async function getServerSideProps(context) {
     };
   }
 
-  // Ensure `features` exist and are properly formatted
   const availableFeatures =
     categoryData.features?.map((feature) => ({
       name: feature.name,
       values: feature.values || [],
     })) || [];
 
-  // Sorting logic
-  let sortQuery = { _id: -1 }; // Default: Newest First
+  let sortQuery = { _id: -1 };
 
   if (sort === "price-low-high") {
     sortQuery = { price: 1 };
@@ -210,7 +217,6 @@ export async function getServerSideProps(context) {
     sortQuery = { _id: 1 };
   }
 
-  // Apply filters based on selected features
   let productFilter = { category: categoryData._id };
 
   Object.keys(filters).forEach((feature) => {
@@ -219,12 +225,10 @@ export async function getServerSideProps(context) {
     }
   });
 
-  // Apply search filter (if any)
   if (search) {
     productFilter.title = { $regex: search, $options: "i" };
   }
 
-  // Fetch sorted & filtered products
   const products = await Product.find(productFilter)
     .populate("category")
     .select("title photos price category features")
@@ -234,7 +238,7 @@ export async function getServerSideProps(context) {
     props: {
       categoryName: categoryData.name,
       products: JSON.parse(JSON.stringify(products)),
-      features: JSON.parse(JSON.stringify(availableFeatures)), // Ensures it's always an array
+      features: JSON.parse(JSON.stringify(availableFeatures)),
     },
   };
 }

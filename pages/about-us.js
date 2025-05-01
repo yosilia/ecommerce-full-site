@@ -11,6 +11,9 @@ const ParagFormatting = styled.div`
   max-width: 800px;
   margin: 0 auto;
   line-height: 1.8;
+  @media (max-width: 768px) {
+    padding: 0 10px;
+  }
 `;
 
 const ParagWriting = styled.p`
@@ -18,12 +21,19 @@ const ParagWriting = styled.p`
   margin-bottom: 1rem;
   font-style: italic;
   color: #333;
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const FormContainer = styled.div`
   max-width: 600px;
   margin: 40px auto 0;
   text-align: center;
+  @media (max-width: 768px) {
+    margin: 20px auto 0;
+    padding: 0 10px;
+  }
 `;
 
 const TextArea = styled.textarea`
@@ -108,26 +118,31 @@ export default function AboutUsPage() {
           <ParagWriting>
             If you have any general queries, feel free to message us.
           </ParagWriting>
-         
           <form onSubmit={handleSubmit}>
-          <Input
+            <Input
               type="text"
               placeholder="Name"
               value={formData.clientName}
-              onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, clientName: e.target.value })
+              }
               required
             />
             <Input
               type="email"
               placeholder="E-mail"
               value={formData.clientEmail}
-              onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, clientEmail: e.target.value })
+              }
               required
             />
             <TextArea
               placeholder="Message"
               value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, message: e.target.value })
+              }
               required
             />
             <LongButton type="submit" disabled={loading}>
@@ -135,7 +150,6 @@ export default function AboutUsPage() {
             </LongButton>
           </form>
           {message && <p>{message}</p>}
-
         </FormContainer>
       </Center>
     </>

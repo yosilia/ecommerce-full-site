@@ -14,11 +14,11 @@ import {
 } from "recharts";
 
 export default function Home() {
-  //const { data: session } = useSession();
+  const { data: session } = useSession();
   const [todayGrossVolume, setTodayGrossVolume] = useState(0);
   const [yesterdayGrossVolume, setYesterdayGrossVolume] = useState(0);
   const [gbpBalance, setGbpBalance] = useState(0);
-  //const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState([]);
 
   // All data
   const [totalRevenue, setTotalRevenue] = useState(0);
@@ -128,19 +128,7 @@ export default function Home() {
   return (
     <Layout>
       <PageContainer>
-
-        {/* Warning for Testers */}
-        <div className="warning-banner">
-          <p>
-            ⚠️ You are accessing the <b>Admin Panel</b> in{" "}
-            <b>Temporary Testing Mode</b>. You have been granted admin access
-            for testing purposes.
-          </p>
-          <p>
-            🚨 This mode is <b>not secure</b> and will be{" "}
-            <b>disabled after Artefact Submission</b>.
-          </p>
-        </div>
+      <h1>Admin Dashboard</h1>
 
         {/* Top Revenue and Chart Section */}
         <TopStats>
