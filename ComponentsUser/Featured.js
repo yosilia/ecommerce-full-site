@@ -1,9 +1,9 @@
-import Center from "@/componentsuser/Center"; 
+import Center from "@/ComponentsUser/Center"; 
 import styled from "styled-components";
-import Button from "./Button";
+import Button from "@/ComponentsUser/Button";
 import { primary } from "@/lib/colors";
 import { useContext } from "react";
-import { CartContext } from "@/componentsuser/CartContext"; 
+import { CartContext } from "@/ComponentsUser/CartContext"; 
 
 const Bg = styled.div`
     background-color: #FAFAFA;

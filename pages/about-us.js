@@ -1,12 +1,12 @@
-import Center from "@/componentsuser/Center";
-import Header from "@/componentsuser/Header";
-import { Input } from "@/componentsuser/CommonStyles";
-import LongButton from "@/componentsuser/LongButton";
-import Title from "@/componentsuser/Title";
+import Center from "@/ComponentsUser/Center";
+import Header from "@/ComponentsUser/Header";
+import { Input } from "@/ComponentsUser/CommonStyles";
+import LongButton from "@/ComponentsUser/LongButton";
+import Title from "@/ComponentsUser/Title";
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
-import Footer from "@/componentsuser/Footer";
+import Footer from "@/ComponentsUser/Footer";
 
 const ParagFormatting = styled.div`
   max-width: 800px;

@@ -1,13 +1,13 @@
 import { useContext } from "react";
-import Header from "@/componentsuser/Header";
-import Featured from "@/componentsuser/Featured";
+import Header from "@/ComponentsUser/Header";
+import Featured from "@/ComponentsUser/Featured";
 import { mongooseConnect } from "@/lib/mongoose";
 import Product from "@/models/Product";
 import Category from "@/models/Category";
-import NewProducts from "@/componentsuser/NewProducts";
+import NewProducts from "@/ComponentsUser/NewProducts";
 import { AuthContext } from "@/context/AuthContext";
-import CategoriesBar from "@/componentsuser/CategoriesBar";
-import Footer from "@/componentsuser/Footer";
+import CategoriesBar from "@/ComponentsUser/CategoriesBar";
+import Footer from "@/ComponentsUser/Footer";
 
 export default function Home({ newProducts, categories }) {
   const { user, loading } = useContext(AuthContext);

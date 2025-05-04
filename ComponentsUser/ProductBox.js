@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import Button from "./Button";
-import CartIcon from "./icons/CartIcon";
+import Button from "@/ComponentsUser/Button";
+import CartIcon from "@/icons/CartIcon";
 import Link from "next/link";
 import { useContext } from "react";
-import { CartContext } from "./CartContext";
+import { CartContext } from "@CartContext";
 
 const ProductWrapper = styled.div`
   display: flex;
@@ -57,9 +57,9 @@ const PriceTag = styled.div`
   font-style: bold;
 `;
 
-export default function ProductBox({ _id, title, description, price, photos }) {
+export default function ProductBox({ slug, _id, title, description, price, photos }) {
   const { addProduct } = useContext(CartContext);
-  const url = "/product/" + _id;
+  const url = "/product/" + slug;
   return (
     <ProductWrapper>
       <WhiteBox href={url}>

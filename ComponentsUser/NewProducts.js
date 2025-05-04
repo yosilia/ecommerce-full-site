@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Center from "./Center";
-import ProductsGrid from "./ProductsGrid";
+import Center from "@/ComponentsUser/Center";
+import ProductsGrid from "@/ComponentsUser/ProductsGrid";
 
 
 const H2Title = styled.h2`
