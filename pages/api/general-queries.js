@@ -1,4 +1,4 @@
-import { mongooseConnect } from "@/lib/mongoose";
+import { mongooseConnect } from "../../lib/mongoose";
 import GeneralQuery from "../../models/GeneralQuery";
 //import { isAdminValid } from "./auth/[...nextauth]";
 import nodemailer from "nodemailer";
