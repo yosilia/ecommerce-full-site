@@ -56,7 +56,7 @@ export default async function handler(req, res) {
 
   // Compute similarity scores for each product (excluding the target)
   const recommendations = allProducts
-    .filter((product) => product._id.toString() !== id.toString())
+    .filter((product) => product.slug.toString() !== id.toString())
     .map((product) => {
       const productText = getProductText(product);
       const productTokens = new Set(tokenize(productText));

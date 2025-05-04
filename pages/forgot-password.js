@@ -1,6 +1,7 @@
 import Header from "@/ComponentsUser/Header";
 import { useState } from "react";
 import { PageContainer, Box, Title, Input, Button } from "@/ComponentsUser/CommonStyles";
+import Footer from "@/ComponentsUser/Footer";
 
 
 export default function ForgotPasswordPage() {
@@ -39,6 +40,7 @@ export default function ForgotPasswordPage() {
           {message && <p>{message}</p>}
         </Box>
       </PageContainer>
+      <Footer />
     </>
   );
 }

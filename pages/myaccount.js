@@ -9,6 +9,7 @@ import Link from "next/link";
 import axios from "axios";
 import userOrderUpdates from "./api/hooks/userOrderUpdates";
 import userRequestUpdates from "./api/hooks/userRequestUpdates";
+import Footer from "@/ComponentsUser/Footer";
 
 const PageContainer = styled.div`
   padding: 40px;
@@ -352,6 +353,7 @@ export default function MyAccount() {
           Logout
         </LogoutButton>
       </PageContainer>
+      <Footer />
     </>
   );
 }

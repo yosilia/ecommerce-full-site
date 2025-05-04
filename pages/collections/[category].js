@@ -9,6 +9,7 @@ import Category from "@/models/Category";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import Footer from "@/ComponentsUser/Footer";
 
 const NoProductsContainer = styled.div`
   text-align: center;
@@ -180,6 +181,7 @@ export default function CategoryPage({ products, categoryName, features }) {
             No products found in this category.
           </p>
         )}
+        <Footer />
       </Center>
     </>
   );

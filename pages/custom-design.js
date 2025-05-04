@@ -4,6 +4,7 @@ import { AuthContext } from "@/context/AuthContext";
 import Button, { ButtonStyle } from "@/ComponentsUser/Button";
 import styled from "styled-components";
 import MeasurementsSection from "@/ComponentsUser/MeasurementsSection";
+import Footer from "@/ComponentsUser/Footer";
 
 const Input = styled.input`
   width: 100%;
@@ -364,6 +365,7 @@ export default function CustomDesignPage() {
           </Button>
         </div>
       </form>
+      <Footer />
     </Header>
   );
 }

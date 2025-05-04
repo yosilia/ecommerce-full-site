@@ -65,14 +65,28 @@ const OrderStatusSelect = styled.select`
   }
 `;
 
+const ScrollContainer = styled.div`
+  max-height: 100vh;        /* cap height at 70% of viewport */
+  overflow-y: auto;        /* scroll vertically when content overflows */
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.5rem;         /* optional—gives some inner breathing room */
+`;
+
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   useEffect(() => {
-    axios.get("/api/orderTime").then((response) => {
-      setOrders(response.data);
-    });
+    axios
+      .get("/api/orderTime?paid=true")
+      .then((response) => {
+        // response.data is the array of paid orders
+        setOrders(response.data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch paid orders:", err);
+      });
   }, []);
-
+  
   // In  admin component (simplified)
   async function updateOrderStatus(orderId, newStatus) {
     try {
@@ -96,6 +110,7 @@ export default function OrdersPage() {
   return (
     <Layout>
       <Title>Orders</Title>
+      <ScrollContainer>
       <Table>
         <TableHeader>
           <TableRow>
@@ -153,6 +168,7 @@ export default function OrdersPage() {
             ))}
         </tbody>
       </Table>
+      </ScrollContainer>
     </Layout>
   );
 }

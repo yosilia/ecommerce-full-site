@@ -57,9 +57,9 @@ const PriceTag = styled.div`
   font-style: bold;
 `;
 
-export default function ProductBox({ _id, title, description, price, photos }) {
+export default function ProductBox({ slug, _id, title, description, price, photos }) {
   const { addProduct } = useContext(CartContext);
-  const url = "/product/" + _id;
+  const url = "/product/" + slug;
   return (
     <ProductWrapper>
       <WhiteBox href={url}>

@@ -6,6 +6,7 @@ import Title from "@/ComponentsUser/Title";
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
+import Footer from "@/ComponentsUser/Footer";
 
 const ParagFormatting = styled.div`
   max-width: 800px;
@@ -151,6 +152,7 @@ export default function AboutUsPage() {
           </form>
           {message && <p>{message}</p>}
         </FormContainer>
+        <Footer />
       </Center>
     </>
   );

@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Category from "@/models/Category";
 import { useEffect } from "react";
+import Footer from "@/ComponentsUser/Footer";
 
 const SortContainer = styled.div`
   display: flex;
@@ -249,6 +250,7 @@ export default function AllItemsPage({ products, features }) {
             No products found.
           </p>
         )}
+        <Footer />
       </Center>
     </>
   );

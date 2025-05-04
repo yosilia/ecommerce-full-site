@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Header from "@/ComponentsUser/Header";
 import { AuthContext } from "@/context/AuthContext";
 import { PageContainer, Box, Title, Input, Button, LinkContainer, StyledLink } from "@/ComponentsUser/CommonStyles";
+import Footer from "@/ComponentsUser/Footer";
 
 export default function AccountPage() {
   const { setUser } = useContext(AuthContext);
@@ -101,6 +102,7 @@ export default function AccountPage() {
           </LinkContainer>
         </Box>
       </PageContainer>
+      <Footer />
     </>
   );
 }

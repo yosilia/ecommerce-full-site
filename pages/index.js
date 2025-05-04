@@ -7,6 +7,7 @@ import Category from "@/models/Category";
 import NewProducts from "@/ComponentsUser/NewProducts";
 import { AuthContext } from "@/context/AuthContext";
 import CategoriesBar from "@/ComponentsUser/CategoriesBar";
+import Footer from "@/ComponentsUser/Footer";
 
 export default function Home({ newProducts, categories }) {
   const { user, loading } = useContext(AuthContext);
@@ -22,6 +23,7 @@ export default function Home({ newProducts, categories }) {
       <Featured />
       <CategoriesBar categories={categories} />
       <NewProducts products={newProducts} />
+      <Footer />
     </div>
   );
 }

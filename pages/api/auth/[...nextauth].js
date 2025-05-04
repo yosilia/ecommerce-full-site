@@ -42,4 +42,5 @@ export async function isAdminValid(req, res) {
     res.end();
     throw 'Not an Authorized Admin';
   }
+
 }
