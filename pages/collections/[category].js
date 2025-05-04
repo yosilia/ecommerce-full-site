@@ -233,7 +233,7 @@ export async function getServerSideProps(context) {
 
   const products = await Product.find(productFilter)
     .populate("category")
-    .select("title photos price category features")
+    .select("title photos price category features slug")
     .sort(sortQuery);
 
   return {
