@@ -1,7 +1,7 @@
-import Center from "@/ComponentsUser/Center";
-import Header from "@/ComponentsUser/Header";
-import ProductsGrid from "@/ComponentsUser/ProductsGrid";
-import Title from "@/ComponentsUser/Title";
+import Center from "@/componentsuser/Center";
+import Header from "@/componentsuser/Header";
+import ProductsGrid from "@/componentsuser/ProductsGrid";
+import Title from "@/componentsuser/Title";
 import { mongooseConnect } from "@/lib/mongoose";
 import Product from "@/models/Product";
 import styled from "styled-components";
@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Category from "@/models/Category";
 import { useEffect } from "react";
-import Footer from "@/ComponentsUser/Footer";
+import Footer from "@/componentsuser/Footer";
 
 const SortContainer = styled.div`
   display: flex;

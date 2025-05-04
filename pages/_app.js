@@ -1,6 +1,6 @@
 // pages/_app.js
 import { SessionProvider } from "next-auth/react";
-import { CartContextProvider } from "@/ComponentsUser/CartContext";
+import { CartContextProvider } from "@/componentsuser/CartContext";
 import { createGlobalStyle } from "styled-components";
 import { AuthProvider } from "@/context/AuthContext";
 

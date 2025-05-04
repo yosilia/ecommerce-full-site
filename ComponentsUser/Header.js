@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Image from "next/image"; // <-- Import Next.js Image
 import styled from "styled-components";
-import Center from "@/ComponentsUser/Center";
+import Center from "@/componentsuser/Center";
 import { useContext, useState } from "react";
-import { CartContext } from "@/ComponentsUser/CartContext";
+import { CartContext } from "@/componentsuser/CartContext";
 import { useRouter } from "next/router";
 import { AuthContext } from "@/context/AuthContext";
 import MenueBarIcon from "./icons/MenueBar";

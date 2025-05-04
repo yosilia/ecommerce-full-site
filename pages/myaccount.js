@@ -1,15 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import Header from "@/ComponentsUser/Header";
+import Header from "@/componentsuser/Header";
 import { AuthContext } from "@/context/AuthContext";
-import LongButton from "@/ComponentsUser/LongButton";
-import Button from "@/ComponentsUser/Button";
+import LongButton from "@/componentsuser/LongButton";
+import Button from "@/componentsuser/Button";
 import Link from "next/link";
 import axios from "axios";
 import userOrderUpdates from "./api/hooks/userOrderUpdates";
 import userRequestUpdates from "./api/hooks/userRequestUpdates";
-import Footer from "@/ComponentsUser/Footer";
+import Footer from "@/componentsuser/Footer";
 
 const PageContainer = styled.div`
   padding: 40px;

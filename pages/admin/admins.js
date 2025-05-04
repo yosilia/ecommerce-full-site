@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Layout from '@/ComponentsAdmin/Layout';
+import Layout from '@/componentsadmin/Layout';
 import styled from 'styled-components';
 
 const Container = styled.div`

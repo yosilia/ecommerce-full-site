@@ -1,18 +1,18 @@
-import Button from "@/ComponentsUser/Button";
-import { CartContext } from "@/ComponentsUser/CartContext";
-import Center from "@/ComponentsUser/Center";
-import Header from "@/ComponentsUser/Header";
-import CartIcon from "@/ComponentsUser/icons/CartIcon";
-import ProductPhotos from "@/ComponentsUser/ProductPhotos";
-import Title from "@/ComponentsUser/Title";
-import WhiteBox from "@/ComponentsUser/WhiteBox";
+import Button from "@/componentsuser/Button";
+import { CartContext } from "@/componentsuser/CartContext";
+import Center from "@/componentsuser/Center";
+import Header from "@/componentsuser/Header";
+import CartIcon from "@/componentsuser/icons/CartIcon";
+import ProductPhotos from "@/componentsuser/ProductPhotos";
+import Title from "@/componentsuser/Title";
+import WhiteBox from "@/componentsuser/WhiteBox";
 import { mongooseConnect } from "@/lib/mongoose";
 import Product from "@/models/Product";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
-import VirtualTryOn from "@/ComponentsUser/VirtualTryOn";
+import VirtualTryOn from "@/componentsuser/VirtualTryOn";
 import styled from "styled-components";
-import Footer from "@/ComponentsUser/Footer";
+import Footer from "@/componentsuser/Footer";
 
 const ColumnWrapper = styled.div`
   display: grid;

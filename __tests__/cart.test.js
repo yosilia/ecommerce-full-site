@@ -2,7 +2,7 @@ import React from "react";
 import "@testing-library/jest-dom"; 
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import CartPage from "@/pages/cart";
-import { CartContext } from "@/ComponentsUser/CartContext";
+import { CartContext } from "@/componentsuser/CartContext";
 import axios from "axios";
 
 // --- Mocks --- //

@@ -2,7 +2,7 @@ import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import Home from "@/pages/admin/index";
-import Layout from "@/ComponentsAdmin/Layout";
+import Layout from "@/componentsadmin/Layout";
 import axios from "axios";
 // Mock Layout so we don't have to render children wrappings
 jest.mock("@/ComponentsAdmin/Layout", () => ({ children }) => (

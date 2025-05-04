@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
 import { useRouter } from "next/router";
-import Header from "@/ComponentsUser/Header";
+import Header from "@/componentsuser/Header";
 import { AuthContext } from "@/context/AuthContext";
-import { PageContainer, Box, Title, Input, Button, LinkContainer, StyledLink } from "@/ComponentsUser/CommonStyles";
-import Footer from "@/ComponentsUser/Footer";
+import { PageContainer, Box, Title, Input, Button, LinkContainer, StyledLink } from "@/componentsuser/CommonStyles";
+import Footer from "@/componentsuser/Footer";
 
 export default function AccountPage() {
   const { setUser } = useContext(AuthContext);
