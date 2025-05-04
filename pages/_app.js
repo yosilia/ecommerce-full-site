@@ -1,8 +1,8 @@
 // pages/_app.js
 import { SessionProvider } from "next-auth/react";
-import { CartContextProvider } from "@/ComponentsUser/CartContext";
+import { CartContextProvider } from "../ComponentsUser/CartContext";
 import { createGlobalStyle } from "styled-components";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider } from "../context/AuthContext";
 
 const GlobalStyles = createGlobalStyle`
   /* Reset & box-sizing */

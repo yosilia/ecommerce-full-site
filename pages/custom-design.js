@@ -1,10 +1,10 @@
-import Header from "@/ComponentsUser/Header";
+import Header from "../ComponentsUser/Header";
 import { useState, useContext, useEffect } from "react";
-import { AuthContext } from "@/context/AuthContext";
-import Button, { ButtonStyle } from "@/ComponentsUser/Button";
+import { AuthContext } from "../context/AuthContext";
+import Button from "../ComponentsUser/Button";
 import styled from "styled-components";
-import MeasurementsSection from "@/ComponentsUser/MeasurementsSection";
-import Footer from "@/ComponentsUser/Footer";
+import MeasurementsSection from "../ComponentsUser/MeasurementsSection";
+import Footer from "../ComponentsUser/Footer";
 
 const Input = styled.input`
   width: 100%;

@@ -1,5 +1,5 @@
-import { mongooseConnect } from "@/lib/mongoose";
-import Order from "@/models/Order";
+import { mongooseConnect } from "../../lib/mongoose";
+import Order from "../../models/Order";
 import { sendOrderUpdateEmail } from "./sendOrderUpdateEmail";
 import Pusher from "pusher";
 

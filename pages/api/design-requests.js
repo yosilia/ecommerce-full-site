@@ -1,5 +1,5 @@
-import { mongooseConnect } from "@/lib/mongoose";
-import DesignRequest from "@/models/DesignRequest";
+import { mongooseConnect } from "../../lib/mongoose";
+import DesignRequest from "../../models/DesignRequest";
 import Pusher from "pusher";
 
 const pusher = new Pusher({

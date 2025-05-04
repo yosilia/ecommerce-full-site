@@ -1,8 +1,8 @@
 import React from "react";
-import Center from "@/ComponentsUser/Center";
-import Header from "@/ComponentsUser/Header";
-import Title from "@/ComponentsUser/Title";
-import Footer from "@/ComponentsUser/Footer";
+import Center from "../ComponentsUser/Center";
+import Header from "../ComponentsUser/Header";
+import Title from "../ComponentsUser/Title";
+import Footer from "../ComponentsUser/Footer";
 import styled from "styled-components";
 
 const ParagFormatting = styled.div`

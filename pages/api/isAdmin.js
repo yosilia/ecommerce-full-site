@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth';
-import clientPromise from '@/lib/db';
+import clientPromise from '../../lib/db';
 import { authOptions } from './auth/[...nextauth]';
 
 async function getAdminEmails() {

@@ -1,5 +1,5 @@
-import { mongooseConnect } from "@/lib/mongoose";
-import Order from "@/models/Order";
+import { mongooseConnect } from "../../lib/mongoose";
+import Order from "../../models/Order";
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 import { buffer } from "micro";
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET; 

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import User from "@/models/User";
-import { mongooseConnect } from "@/lib/mongoose";
+import User from "../../../models/User";
+import { mongooseConnect } from "../../../lib/mongoose";
 import nodemailer from "nodemailer";
 
 export default async function handler(req, res) {

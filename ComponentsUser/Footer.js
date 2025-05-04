@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
-import Center from "@/ComponentsUser/Center";
+import Center from "../ComponentsUser/Center";
 
 const FooterContainer = styled.footer`
   background: #f8f9fa;

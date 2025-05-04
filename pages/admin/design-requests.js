@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Layout from "@/componentsadmin/Layout";
+import Layout from "../../componentsadmin/Layout";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import MeasurementsSection from "@/ComponentsUser/MeasurementsSection"; // Adjust the path as needed
+import MeasurementsSection from "../../ComponentsUser/MeasurementsSection"; // Adjust the path as needed
 
 const Container = styled.div`
   background-color: white;

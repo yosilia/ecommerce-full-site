@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import Button from "@/ComponentsUser/Button";
-import CartIcon from "@/icons/CartIcon";
+import Button from "../ComponentsUser/Button";
+import CartIcon from "../ComponentsUser/icons/CartIcon";
 import Link from "next/link";
 import { useContext } from "react";
-import { CartContext } from "@CartContext";
+import { CartContext } from "../ComponentsUser/CartContext";
 
 const ProductWrapper = styled.div`
   display: flex;

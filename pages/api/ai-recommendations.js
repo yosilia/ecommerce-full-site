@@ -1,7 +1,7 @@
 import natural from 'natural';
-import Product from '@/models/Product';
-import Order from '@/models/Order';
-import { mongooseConnect } from '@/lib/mongoose';
+import Product from '../../models/Product';
+import Order from '../../models/Order';
+import { mongooseConnect } from '../../lib/mongoose';
 
 // Build product text profile from available fields.
 function getProductText(product) {

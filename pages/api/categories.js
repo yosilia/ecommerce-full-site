@@ -1,5 +1,5 @@
-import { mongooseConnect } from '@/lib/mongoose';
-import Category from '@/models/Category';
+import { mongooseConnect } from '../../lib/mongoose';
+import Category from '../../models/Category';
 //import { isAdminValid } from '@/pages/api/auth/[...nextauth]';
 
 export default async function handle(req, res) {

@@ -1,5 +1,5 @@
-import Product from '@/models/Product';
-import { mongooseConnect } from '@/lib/mongoose';
+import Product from '../../models/Product';
+import { mongooseConnect } from '../../lib/mongoose';
 //import { isAdminValid } from '@/pages/api/auth/[...nextauth]';
 import mongoose from 'mongoose'; 
 

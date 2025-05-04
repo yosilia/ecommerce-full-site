@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "@/models/User";
-import { mongooseConnect } from "@/lib/mongoose";
+import User from "../../../models/User";
+import { mongooseConnect } from "../../../lib/mongoose";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ message: "Method Not Allowed" });

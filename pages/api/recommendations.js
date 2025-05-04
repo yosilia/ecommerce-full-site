@@ -1,5 +1,5 @@
-import Product from '@/models/Product';
-import { mongooseConnect } from '@/lib/mongoose';
+import Product from '../../models/Product';
+import { mongooseConnect } from '../../lib/mongoose';
 
 // Tokenizer: lowercases, removes punctuation, and splits text
 function tokenize(text) {
