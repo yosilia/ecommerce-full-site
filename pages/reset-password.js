@@ -1,13 +1,9 @@
 import Header from "@/ComponentsUser/Header";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import {
-  PageContainer,
-  Box,
-  Title,
-  Input,
-  Button,
-} from "@/ComponentsUser/CommonStyles";
+import Footer from "@/ComponentsUser/Footer";
+import { PageContainer, Box, Title, Input, Button } from "@/ComponentsUser/CommonStyles";
+
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
