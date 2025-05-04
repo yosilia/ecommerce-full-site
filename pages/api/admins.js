@@ -1,4 +1,4 @@
-import clientPromise from '@/lib/db';
+import clientPromise from '../../lib/db';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './auth/[...nextauth]';
 //import { isAdminValid } from './auth/[...nextauth]';

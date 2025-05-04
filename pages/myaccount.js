@@ -7,8 +7,8 @@ import LongButton from "../ComponentsUser/LongButton";
 import Button from "../ComponentsUser/Button";
 import Link from "next/link";
 import axios from "axios";
-import userOrderUpdates from "../api/hooks/userOrderUpdates";
-import userRequestUpdates from "../api/hooks/userRequestUpdates";
+import userOrderUpdates from "../pages/api/hooks/userOrderUpdates";
+import userRequestUpdates from "../pages/api/hooks/userRequestUpdates";
 import Footer from "../ComponentsUser/Footer";
 
 const PageContainer = styled.div`
