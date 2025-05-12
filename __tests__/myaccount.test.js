@@ -29,9 +29,8 @@ jest.mock("@/ComponentsUser/Header", () => () => (
 ));
 
 // Mock the pusher hooks so they don't execute their real code.
-jest.mock("../api/hooks/userOrderUpdates", () => jest.fn());
-jest.mock("../api/hooks/userRequestUpdates", () => jest.fn());
-
+jest.mock("../pages/api/hooks/userOrderUpdates", () => jest.fn());
+jest.mock("../pages/api/hooks/userRequestUpdates", () => jest.fn());
 // Mock axios since it's used for orders.
 jest.mock("axios");
 
@@ -151,8 +150,12 @@ describe("MyAccount Page", () => {
     expect(
       await screen.findByDisplayValue("Order #order123")
     ).toBeInTheDocument();
-    // Instead of checking the text node containing "Status:", check directly for "In Progress".
-    expect(screen.getByText("In Progress")).toBeInTheDocument();
+
+    // Wait for the order status to appear
+    await waitFor(() => {
+      expect(screen.getByText("In Progress")).toBeInTheDocument();
+    });
+
     // Verify product details.
     expect(screen.getByText(/Product A x 2/i)).toBeInTheDocument();
   });

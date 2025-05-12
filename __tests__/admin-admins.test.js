@@ -30,9 +30,9 @@ describe("AdminsPage", () => {
     render(<AdminsPage />);
 
     // Assert: wait for that email to appear
-    expect(
-      await screen.findByText("admin1@example.com")
-    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText("admin1@example.com")).toBeInTheDocument()
+    );
 
     // And a Remove button next to it
     expect(screen.getByRole("button", { name: "Remove" })).toBeInTheDocument();

@@ -24,7 +24,6 @@ ProductSchema.pre('save', function (next) {
   next();
 });
 
-/* Export (avoids model overwrite in hot‑reload) --------------------------- */
 const Product = models.Product || model('Product', ProductSchema);
 export default Product;
 

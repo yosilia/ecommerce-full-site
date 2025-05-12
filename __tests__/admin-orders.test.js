@@ -46,7 +46,7 @@ describe("OrdersPage", () => {
 
     // Verify the API call is made with the correct endpoint
     await waitFor(() => {
-      expect(axios.get).toHaveBeenCalledWith("/api/orderTime");
+      expect(axios.get).toHaveBeenCalledWith("/api/orderTime?paid=true");
     });
 
     // Check if the order date is displayed
