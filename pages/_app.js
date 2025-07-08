@@ -14,6 +14,8 @@ const GlobalStyles = createGlobalStyle`
     height: 100%;
     margin: 0;
     padding: 0;
+    scroll-behavior: smooth;
+
   }
 
   body {
@@ -21,9 +23,13 @@ const GlobalStyles = createGlobalStyle`
     font-family: "Lora", serif;
     overscroll-behavior: none;
   }
+
 `;
 
-export default function App({ Component, pageProps: { session, ...pageProps } }) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}) {
   return (
     <SessionProvider session={session}>
       <AuthProvider>

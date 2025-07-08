@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image"; 
+import Image from "next/image";
 import styled from "styled-components";
 import Center from "../ComponentsUser/Center";
 import { useContext, useState } from "react";
@@ -26,10 +26,10 @@ const HeroBackground = styled.div`
   z-index: -1;
   width: 100%;
   height: 100%;
-  overflow: hidden; 
-  /* If you want a parallax-like effect, you can explore
-     a custom solution. background-attachment: fixed doesn't
-     directly translate to Next.js <Image>. */
+  overflow: hidden;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 `;
 
 const BgImage = styled(Image)`
@@ -150,8 +150,10 @@ export default function Header({ showBackground = true, children }) {
           <BgImage
             src="/bg(1).jpg"
             alt="DM Touch background"
-            fill            // occupies the HeroBackground container
-            priority        // mark as high-priority for LCP
+            fill
+            priority
+            loading="eager"
+            quality={75}
           />
         </HeroBackground>
       )}
@@ -170,7 +172,10 @@ export default function Header({ showBackground = true, children }) {
             <NavigationLink href={"/"} $darkMode={DarkMode}>
               Home
             </NavigationLink>
-            <NavigationLink href={"/collections/all-items"} $darkMode={DarkMode}>
+            <NavigationLink
+              href={"/collections/all-items"}
+              $darkMode={DarkMode}
+            >
               Shop
             </NavigationLink>
             <NavigationLink href={"/about-us"} $darkMode={DarkMode}>
