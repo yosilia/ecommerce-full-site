@@ -75,10 +75,9 @@ This is a fully functional, full-stack e-commerce web application built with Rea
    ```bash
    npm install
    ```
-
-3. Create a `.env.local` file in the root directory and add the following variables with your own secrets and keys:
-
  ### Environment Variables
+ 
+3. Create a `.env.local` file in the root directory and add the following variables with your own secrets and keys:
 
 ```env
 NEXT_PUBLIC_BASE_URL=your_base_url
