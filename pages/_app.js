@@ -17,6 +17,10 @@ const GlobalStyles = createGlobalStyle`
     scroll-behavior: smooth;
 
   }
+    a {
+  color: inherit;
+  text-decoration: none;
+}
 
   body {
     background-color: #FAFAFA;

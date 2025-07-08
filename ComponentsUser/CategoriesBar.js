@@ -7,19 +7,25 @@ const Bg = styled.div`
   padding: 50px 0;
 `;
 
-const P = styled.h2`
+const Heading = styled.h2`
   margin: 0;
   font-weight: normal;
   text-align: center;
   margin-bottom: 20px;
 `;
+
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 20px;
   justify-content: center;
   text-align: center;
-  padding-top: 20px; 
+  padding-top: 20px;
+`;
+
+const StyledLink = styled.a`
+  text-decoration: none;
+  color: inherit;
 `;
 
 const CategoryCard = styled.div`
@@ -34,10 +40,17 @@ const CategoryCard = styled.div`
   justify-content: center;
 
   img {
-    width: 100px; /* Set a fixed width */
-    height: 130px; /* Ensure all images have the same height */
-    object-fit: cover; /* Crop images to fit */
+    width: 100px;
+    height: 130px;
+    object-fit: cover;
     border-radius: 10px;
+  }
+
+  p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
   }
 
   &:hover {
@@ -45,33 +58,25 @@ const CategoryCard = styled.div`
   }
 `;
 
-const CategoryWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 180px; /* Ensure all category cards have the same height */
-`;
-
 export default function CategoriesBar({ categories }) {
   return (
     <Bg>
       <Center>
-        <P>Browse by Category</P>
+        <Heading>Browse by Category</Heading>
         <Wrapper>
           {categories.map((category, index) => (
             <Link
-            key={index}
-            href={`/collections/${category.slug || category._id}`} // Ensure slug or fallback to _id
-            passHref
-          >
-            <CategoryWrapper>
-              <CategoryCard>
-                <img src={category.image} alt={category.name} />
-                <p>{category.name}</p>
-              </CategoryCard>
-            </CategoryWrapper>
-          </Link>
+              key={index}
+              href={`/collections/${category.slug || category._id}`}
+              passHref
+            >
+              <StyledLink>
+                <CategoryCard>
+                  <img src={category.image} alt={category.name} />
+                  <p>{category.name}</p>
+                </CategoryCard>
+              </StyledLink>
+            </Link>
           ))}
         </Wrapper>
       </Center>

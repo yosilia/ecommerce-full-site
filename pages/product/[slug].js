@@ -13,6 +13,7 @@ import { useContext, useEffect, useState } from "react";
 import VirtualTryOn from "../../ComponentsUser/VirtualTryOn";
 import styled from "styled-components";
 import Footer from "../../ComponentsUser/Footer";
+import Image from "next/image";
 
 const ColumnWrapper = styled.div`
   display: grid;
@@ -55,14 +56,17 @@ const RecommendationCard = styled.a`
   color: inherit;
   text-decoration: none;
   scroll-snap-align: start;
-  &:hover p { text-decoration: underline; }
+  &:hover p {
+    text-decoration: none;
+  }
 `;
 
-const RecommendationImage = styled.img`
+const RecommendationImageWrapper = styled.div`
   width: 100%;
   height: 150px;
-  object-fit: cover;
+  position: relative;  
   border-radius: 4px;
+  overflow: hidden;
 `;
 
 const RecTitle = styled.p`
@@ -172,10 +176,17 @@ export default function ProductPage({ product }) {
                 {recommendations.map((rec) => (
                   <Link key={rec._id} href={`/product/${rec.slug}`} passHref>
                     <RecommendationCard>
-                      <RecommendationImage
-                        src={rec.photos?.[0] || "/placeholder.jpg"}
-                        alt={rec.title}
-                      />
+                      <RecommendationImageWrapper>
+  <Image
+    src={rec.photos?.[0] || "/placeholder.jpg"}
+    alt={rec.title}
+    layout="fill"
+    objectFit="cover"
+    priority={false} // lazy loads by default
+    sizes="(max-width: 768px) 100vw, 150px"
+  />
+</RecommendationImageWrapper>
+
                       <RecTitle>{rec.title}</RecTitle>
                     </RecommendationCard>
                   </Link>

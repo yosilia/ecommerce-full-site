@@ -4,6 +4,10 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  images: {
+    domains: ['haliat-next-ecommerce.s3.amazonaws.com'],
+  },
 };
 
 export default nextConfig;
+
