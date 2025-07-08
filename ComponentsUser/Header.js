@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image"; // <-- Import Next.js Image
+import Image from "next/image"; 
 import styled from "styled-components";
 import Center from "../ComponentsUser/Center";
 import { useContext, useState } from "react";
@@ -148,7 +148,7 @@ export default function Header({ showBackground = true, children }) {
       {showBackground && (
         <HeroBackground>
           <BgImage
-            src="/bg.jpg"
+            src="/bg(1).jpg"
             alt="DM Touch background"
             fill            // occupies the HeroBackground container
             priority        // mark as high-priority for LCP
