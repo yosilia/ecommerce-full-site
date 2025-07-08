@@ -24,7 +24,7 @@ This is a fully functional, full-stack e-commerce web application built with Rea
 ## Tech Stack
 
 - **Frontend:** React, React Router, CSS Modules, styled-components
-- **Backend:** Node.js, Express.js, MongoDB (or your database), Mongoose ORM
+- **Backend:** Node.js, MongoDB, Mongoose ORM
 - **Authentication:** JWT (JSON Web Tokens)
 - **Payment Gateway:** Stripe API
 - **Deployment:** Frontend and backend deployed on Vercel 
