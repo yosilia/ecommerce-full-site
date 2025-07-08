@@ -19,6 +19,11 @@ This is a fully functional, full-stack e-commerce web application built with Rea
 - **State Management:** Uses React Context API / Redux
 - **Error Handling & Validation:** Both frontend and backend validation to ensure data integrity
 
+## 🔐 Access Control
+
+- Users can register and log in to access account features
+- Admin dashboard is protected and only accessible to verified admin users
+
 ---
 
 ## Tech Stack
